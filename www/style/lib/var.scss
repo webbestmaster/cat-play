@@ -1,0 +1,16 @@
+.serv__clear {
+  clear: both;
+}
+
+.serv__clear-self {
+  &:after {
+    content: '';
+    clear: both;
+    display: block;
+  }
+}
+
+.serv__is-disabled {
+  opacity: 0.5;
+}
+
