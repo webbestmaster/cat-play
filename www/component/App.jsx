@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import { resizeScreen } from '../actions';
+import {resizeScreen} from '../actions';
 import {connect} from 'react-redux';
+import {CatView} from './../container/index';
 
 class App extends Component {
 
@@ -9,7 +10,10 @@ class App extends Component {
     }
 
     render() {
-        return <div>{this.props.children}</div>;
+        return <div>
+            <CatView />
+            {this.props.children}
+        </div>;
     }
 
 }

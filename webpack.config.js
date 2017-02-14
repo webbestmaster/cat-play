@@ -34,8 +34,8 @@ const webpackConfig = {
 
     watch: NODE_ENV === DEVELOPMENT,
 
-    // devtool: NODE_ENV === DEVELOPMENT ? 'source-map' : null,
-    devtool: null,
+    devtool: NODE_ENV === DEVELOPMENT ? 'source-map' : null,
+    // devtool: null,
 
     postcss: [Autoprefixer({
         browsers: IS_MOBILE ? [

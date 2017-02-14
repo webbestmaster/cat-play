@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Router, Route, IndexRoute} from 'react-router';
 
-import {Home} from './container';
+import {HomeView} from './container';
 import {App} from './component';
 
 export default class AppRouter extends Component {
@@ -10,7 +10,7 @@ export default class AppRouter extends Component {
         return <Router history={this.props.history}>
             <Route path="/" component={App}>
 
-                <IndexRoute component={Home}/>
+                <IndexRoute component={HomeView}/>
 
             </Route>
         </Router>;
