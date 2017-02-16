@@ -10,4 +10,8 @@ export default class CatModel extends BaseModel {
         super();
     }
 
+    moveTo(x, y) {
+        this.set({x, y});
+    }
+
 }

@@ -1,6 +1,7 @@
 export default {
     TYPE: {
-        RESIZE: 'RESIZE'
+        RESIZE: 'RESIZE',
+        CLICK: 'CLICK',
     },
     DB: {
         IMAGE_TABLE: 'IMAGE_TABLE',

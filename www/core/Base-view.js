@@ -4,7 +4,7 @@ export default class BaseView extends Component {
 
     constructor() {
         super();
-        console.log('Created instance ->', this.constructor.name);
+        console.log('Created View ->', this.constructor.name);
         console.log(this);
     }
 

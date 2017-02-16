@@ -1,8 +1,19 @@
 class BaseModel {
 
-    constructor() {
-        this._listeners = {};
-        this._attr = {};
+    constructor(properies) {
+
+        console.log('Created Model ->', this.constructor.name);
+        console.log(this);
+
+        const model = this;
+
+        model._listeners = {};
+        model._attr = {};
+
+        if (properies) {
+            model.set(properies);
+        }
+
     }
 
     destroy() {

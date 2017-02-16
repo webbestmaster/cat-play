@@ -5,5 +5,4 @@ import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute, browserHistory, hashHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
-require('lodash');
 require('es6-promise-polyfill');

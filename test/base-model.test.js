@@ -13,6 +13,14 @@ describe('Base model', function () {
     afterEach(() => model.destroy());
 
 
+    it('constructor', () => {
+
+        model = new BaseModel({prop: 'value'});
+        assert(model.get('prop') === 'value');
+
+    });
+
+
     it('set/get', () => {
 
         model.set('key-1', 'value-1');

@@ -11,9 +11,12 @@ const initialState = {
 
 const RESIZE = appConst.TYPE.RESIZE;
 
+console.log(RESIZE, docElem.clientWidth, docElem.clientHeight);
+
 export default function screen(state = initialState, action) {
 
     if (action.type === RESIZE) {
+        console.log(RESIZE, docElem.clientWidth, docElem.clientHeight);
         return {
             ...state,
             width: docElem.clientWidth,

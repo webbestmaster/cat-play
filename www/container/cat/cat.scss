@@ -1,8 +1,11 @@
-.CatView__cat {
-  display: block;
+.CatView__wrapper {
   position: absolute;
   width: 200px;
-  height: auto;
   left: 0;
   top: 0;
+}
+
+.CatView__cat {
+  width: 100%;
+  display: block;
 }
