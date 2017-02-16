@@ -14,10 +14,21 @@ class BaseModel {
 
     }
 
+    /**
+     *
+     * @param {String|*} key
+     * @param {*} [value]
+     * @return {BaseModel}
+     */
     set(key, value) {
         return typeof key === 'string' ? this._setKeyValue(key, value) : this._setObject(key);
     }
 
+    /**
+     *
+     * @param {String} key
+     * @return {*}
+     */
     get(key) {
         return this._attr[key];
     }
