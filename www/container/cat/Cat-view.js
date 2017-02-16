@@ -6,6 +6,9 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import BaseView from '../../core/Base-view';
 
+const catImage = require('./cat.svg');
+require('./cat.scss');
+
 export default class CatView extends BaseView {
 
     // constructor() {
@@ -14,12 +17,8 @@ export default class CatView extends BaseView {
     //     console.log(this);
     // }
 
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
-    }
-
     render() {
-        return <div>Cat view</div>;
+        return <img className="CatView__cat" src={catImage} alt=""/>;
     }
 
 }
