@@ -79,6 +79,29 @@ describe('Base model', function () {
 
     });
 
+    it('onChange list on properties', () => {
+
+        let paramNewValue, paramOldValue;
+
+        model.set({
+            prop_1: 'val_1',
+            prop_2: 'val_2',
+            prop_3: 'val_3'
+        });
+
+        // check passed params
+        model.onChange(['prop_1', 'prop_2', 'prop_3'], (newValue, oldValue) => {
+            paramNewValue = newValue;
+            paramOldValue = oldValue;
+        });
+
+        model.set('prop_2', 'new_val_2');
+
+        assert(paramNewValue === 'new_val_2');
+        assert(paramOldValue === 'val_2');
+
+    });
+
 
     it('offChange', () => {
 
@@ -87,9 +110,11 @@ describe('Base model', function () {
         function paramOnePass() {
             counter += 1;
         }
+
         function paramTwoPass() {
             counter += 10;
         }
+
         function paramThreePass() {
             counter += 100;
         }
@@ -113,6 +138,31 @@ describe('Base model', function () {
 
     });
 
+    it('offChange list on properties', () => {
+
+        let paramNewValue, paramOldValue;
+
+        model.set({
+            prop_1: 'val_1',
+            prop_2: 'val_2',
+            prop_3: 'val_3'
+        });
+
+        // check passed params
+        model.onChange(['prop_1', 'prop_2', 'prop_3'], (newValue, oldValue) => {
+            paramNewValue = newValue;
+            paramOldValue = oldValue;
+        });
+
+        // check passed params
+        model.offChange(['prop_2', 'prop_3']);
+
+        model.set('prop_2', 'new_val_2');
+
+        assert(paramNewValue === undefined);
+        assert(paramOldValue === undefined);
+
+    });
 
     it('trigger', () => {
 
@@ -155,7 +205,8 @@ describe('Base model', function () {
 
         model.set({anyParam: 'anyValue'});
 
-        model.onChange('anyParam', () => {});
+        model.onChange('anyParam', () => {
+        });
 
         model.destroy();
 

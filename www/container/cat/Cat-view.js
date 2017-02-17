@@ -5,27 +5,40 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import BaseView from '../../core/Base-view';
-import {TimelineLite, Power0} from 'gsap';
+// import {TimelineLite, Power0} from 'gsap';
 import CatModel from './Cat-model';
+import CatText from './component/Cat-text';
 
-const catImage = require('./cat.svg');
+import actionSay from './action/cat-say';
 
-require('./cat.scss');
+const catImage = require('./img/cat.svg');
+
+require('./style/cat.scss');
 
 class CatView extends BaseView {
 
     constructor() {
         super();
-        this.model = new CatModel();
+
+        let view = this;
+        let model = new CatModel({
+            view: view,
+            x: 0,
+            y: 0
+        });
+
+        model.bindEventListeners();
+
+        view.model = model;
+
+
     }
 
     componentDidMount() {
 
-        let model = this;
+        let view = this;
 
-        model.initializeDomNode();
-
-        // this.moveTo(x, y, 10);
+        view.initializeDomNode();
 
     }
 
@@ -34,49 +47,44 @@ class CatView extends BaseView {
         let view = this;
         let model = view.model;
         let screen = view.props.screen;
-        // let screenWidth = screen.width;
-        // let screenHeight = screen.height;
 
         let minSize = Math.round(Math.min(screen.width, screen.height) / 4);
 
-        view.refs.wrapper.style.width = minSize + 'px';
-
-        model.set('node.width', minSize);
-        model.set('node.height', minSize);
+        model.set({
+            [model.const.node.width]: minSize,
+            [model.const.node.height]: minSize
+        });
 
     }
 
     say(text) {
 
 
+
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('--->', nextProps);
-        this.moveTo(nextProps.click.x, nextProps.click.y, 3);
-    }
 
-    moveTo(x, y, time = 0) {
+        console.log('--->', 'componentWillReceiveProps', nextProps);
 
-        let view = this;
-        let tl = new TimelineLite();
+        const view = this;
+        const model = view.model;
 
-        let prevTween = this.model.get('tween.move');
-
-        if (prevTween) {
-            prevTween.pause();
-            prevTween.kill();
-        }
-
-        this.model.set('tween.move', tl.to(this.refs.wrapper, time, {x, y, ease: Power0.easeNone}));
-
-        return view;
+        model.set({
+            x: nextProps.click.x,
+            y: nextProps.click.y
+        });
 
     }
 
     render() {
         return <div ref="wrapper" className="CatView__wrapper">
-            <img className="CatView__cat" src={catImage} alt=""/>
+
+            {this.props.reducerSay.text && <CatText text={this.props.reducerSay.text} />}
+
+            <img className="CatView__cat" src={catImage} onClick={
+                ()=>this.props.actionSay('Meow!!! I am THE cat!!!')
+            } alt=""/>
         </div>;
     }
 
@@ -85,8 +93,12 @@ class CatView extends BaseView {
 
 export default connect(
     state => ({
+        reducerSay: state.reducerCatSay,
         screen: state.screen,
         click: state.click
-    })
+    }),
+    {
+        actionSay: actionSay
+    }
 )(CatView);
 

@@ -46,7 +46,7 @@ class BaseModel {
 
     /**
      *
-     * @param {String} key
+     * @param {String|String[]} key
      * @param {Function} action
      * @param {*} [context]
      * @return {BaseModel}
@@ -55,9 +55,19 @@ class BaseModel {
 
         let model = this;
 
-        let lesteners = model.getListenersByKey(key);
+        if (Array.isArray(key)) {
 
-        lesteners.push([action, context || null]);
+            key.forEach(function (key) {
+                model.onChange(key, action, context);
+            });
+
+            return model;
+
+        }
+
+        let listeners = model.getListenersByKey(key);
+
+        listeners.push([action, context || null]);
 
         return model;
 
@@ -65,7 +75,7 @@ class BaseModel {
 
     /**
      *
-     * @param {String} [key]
+     * @param {String|String[]} [key]
      * @param {Function} [action]
      * @param {*} [context]
      * @return {BaseModel}
@@ -73,6 +83,16 @@ class BaseModel {
     offChange(key, action, context) {
 
         let model = this;
+
+        if (Array.isArray(key)) {
+
+            key.forEach(function (key) {
+                model.offChange(key, action, context);
+            });
+
+            return model;
+
+        }
 
         // key did not passed
         if (key === undefined) {
