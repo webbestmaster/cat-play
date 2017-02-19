@@ -3,10 +3,13 @@
  */
 
 import React from 'react';
+import {connect} from 'react-redux';
 import BaseView from '../../../core/Base-view';
 import {TimelineLite, Back} from 'gsap';
 
-export default class Text extends BaseView {
+import {showText, setIsTexting} from './../action/index';
+
+class Text extends BaseView {
 
     animateText() {
 
@@ -18,6 +21,8 @@ export default class Text extends BaseView {
                     this.kill();
                 }
             });
+
+        this.props.setIsTextingAction(true);
 
         tl
             .fromTo(wrapperNode, 0.75, {alpha: 0, y: '0%'}, {y: '-100%', alpha: 1, ease: Back.easeOut.config(1.4)})
@@ -39,9 +44,16 @@ export default class Text extends BaseView {
             return <div key={i}>{chunk}</div>;
         });
 
-        return <div ref="wrapper" className="CatView__text">
-            {text}
-            </div>;
+        return <div ref="wrapper" className="CatView__text">{text}</div>;
     }
 
 }
+
+// console.log()
+
+export default connect(
+    null,
+    {
+        setIsTextingAction: setIsTexting
+    }
+)(Text);

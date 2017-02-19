@@ -9,7 +9,7 @@ import CatModel from './Cat-model';
 import Text from './component/text';
 import {TimelineLite, Back} from 'gsap';
 
-import {showText} from './action/index';
+import {showText, setIsTexting} from './action/index';
 
 const catImage = require('./img/cat.svg');
 
@@ -121,6 +121,7 @@ class CatView extends BaseView {
         return <div ref="wrapper" className="CatView__wrapper">
             {text && <Text text={text}/>}
             <img className="CatView__cat" ref="image" onClick={() => this.runTextSequence()} src={catImage} alt=""/>
+            {this.props.setIsTextingReducer.isTexting && <div>is texting !!!!!!!!!!!!!!!!!!!!!!</div>}
         </div>;
     }
 
@@ -129,9 +130,11 @@ class CatView extends BaseView {
 export default connect(
     state => ({
         showTextReducer: state.catReducer.showText,
+        setIsTextingReducer: state.catReducer.setIsTexting,
         screen: state.screen
     }),
     {
-        showTextAction: showText
+        showTextAction: showText,
+        setIsTextingAction: setIsTexting
     }
 )(CatView);
