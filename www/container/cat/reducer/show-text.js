@@ -1,10 +1,10 @@
 import CONST from './../constant';
 
-const catSayType = CONST.action.type.say;
+const typeShowText = CONST.type.showText;
 
-export default function reducerSay(state = {}, action) {
+export default function showText(state = {text: ''}, action) {
 
-    if (action.type === catSayType) {
+    if (action.type === typeShowText) {
         return {
             ...state,
             text: action.text

@@ -6,3 +6,4 @@ import { Router, Route, IndexRoute, browserHistory, hashHistory } from 'react-ro
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
 require('es6-promise-polyfill');
+require('./lib/SplitText');

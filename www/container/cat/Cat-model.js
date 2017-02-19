@@ -4,6 +4,7 @@
 
 import BaseModel from './../../core/Base-model';
 import {TimelineLite, Power0} from 'gsap';
+import util from './../../services/util';
 
 const CONST = {
     tween: {
@@ -50,8 +51,8 @@ export default class CatModel extends BaseModel {
                 style.height = height + 'px';
 
                 model.set({
-                    [CONST.node.halfWidth]: Math.round( width / 2),
-                    [CONST.node.halfHeight]: Math.round( height / 2)
+                    [CONST.node.halfWidth]: Math.round(width / 2),
+                    [CONST.node.halfHeight]: Math.round(height / 2)
                 });
 
             },
@@ -64,8 +65,6 @@ export default class CatModel extends BaseModel {
 
         console.log('---> moveTo', this.getAllAttributes());
 
-        let time = 2;
-
         const model = this;
         const x = model.get('x');
         const y = model.get('y');
@@ -73,19 +72,7 @@ export default class CatModel extends BaseModel {
         const nodeHalfWidth = model.get(CONST.node.halfWidth);
         const nodeHalfHeight = model.get(CONST.node.halfHeight);
 
-        let tl = new TimelineLite();
-
-        let prevTween = model.get(CONST.tween.moveTo);
-
-        if (prevTween) {
-            prevTween.pause();
-            prevTween.kill();
-        }
-
-        model.set(
-            CONST.tween.moveTo,
-            tl.to(view.refs.wrapper, time, {x: x - nodeHalfWidth, y: y - nodeHalfHeight, ease: Power0.easeNone})
-        );
+        view.refs.wrapper.style[util.prefix.js + 'Transform'] = 'translate3d(' + (x - nodeHalfWidth) + 'px,' + (y - nodeHalfHeight) + 'px, 0)';
 
     }
 

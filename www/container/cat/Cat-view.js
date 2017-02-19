@@ -5,11 +5,10 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import BaseView from '../../core/Base-view';
-// import {TimelineLite, Power0} from 'gsap';
 import CatModel from './Cat-model';
-import CatText from './component/Cat-text';
+import Text from './component/text';
 
-import actionSay from './action/cat-say';
+import {showText} from './action/index';
 
 const catImage = require('./img/cat.svg');
 
@@ -40,6 +39,11 @@ class CatView extends BaseView {
 
         view.initializeDomNode();
 
+        view.props.showTextAction('Lorem ipsum dolor sit amet, ' +
+            'consectetur adipisicing elit. Accusantium aperiam, beatae blanditiis dicta dolor, dolores, ' +
+            'ipsa mollitia optio sapiente veritatis vero voluptas! ' +
+            'Aspernatur doloribus eius expedita explicabo, ipsum itaque quam.');
+
     }
 
     initializeDomNode() {
@@ -55,11 +59,8 @@ class CatView extends BaseView {
             [model.const.node.height]: minSize
         });
 
-    }
-
-    say(text) {
-
-
+        model.set('x', Math.round(screen.width / 2));
+        model.set('y', Math.round(screen.height / 2));
 
     }
 
@@ -69,36 +70,40 @@ class CatView extends BaseView {
 
         const view = this;
         const model = view.model;
+        const screen = nextProps.screen;
+
+        // centrize cat head
+        const minSize = Math.round(Math.min(screen.width, screen.height) / 4);
 
         model.set({
-            x: nextProps.click.x,
-            y: nextProps.click.y
+            [model.const.node.width]: minSize,
+            [model.const.node.height]: minSize
+        });
+
+        model.set({
+            x: Math.round(screen.width / 2),
+            y: Math.round(screen.height / 2)
         });
 
     }
 
     render() {
         return <div ref="wrapper" className="CatView__wrapper">
-
-            {this.props.reducerSay.text && <CatText text={this.props.reducerSay.text} />}
-
-            <img className="CatView__cat" src={catImage} onClick={
-                ()=>this.props.actionSay('Meow!!! I am THE cat!!!')
-            } alt=""/>
+            {this.props.showTextReducer.text && <Text text={this.props.showTextReducer.text}/>}
+            <img className="CatView__cat" src={catImage} alt=""/>
         </div>;
     }
 
 }
 
-
 export default connect(
     state => ({
-        reducerSay: state.reducerCatSay,
+        showTextReducer: state.catReducer.showText,
         screen: state.screen,
         click: state.click
     }),
     {
-        actionSay: actionSay
+        showTextAction: showText
     }
 )(CatView);
 
