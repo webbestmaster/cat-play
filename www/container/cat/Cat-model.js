@@ -13,7 +13,7 @@ const CONST = {
     text: {
         welcome: 'welcomeTextList',
         welcomeTextList: [
-            'Hello! My name is XyberCat!',
+            'Hello! My name is XyberCat! \n----------\n Tap my face to continue.',
             'How are you?',
             'Any Way I want to play with you!',
             'The Game Has Begun!'

@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import BaseView from '../../core/Base-view';
 import CatModel from './Cat-model';
 import Text from './component/text';
+import {TimelineLite, Back} from 'gsap';
 
 import {showText} from './action/index';
 
@@ -37,6 +38,22 @@ class CatView extends BaseView {
         let view = this;
 
         view.initializeDomNode();
+        view.animateAppearing();
+
+    }
+
+    animateAppearing() {
+
+        let view = this,
+            imageNode = view.refs.image,
+            tl = new TimelineLite({
+                onComplete: function () {
+                    this.kill();
+                    view.runTextSequence();
+                }
+            });
+
+        tl.fromTo(imageNode, 1.2, {alpha: 0, scale: 0}, {delay: 0.3, alpha: 1, scale: 1, ease: Back.easeOut.config(1.4)});
 
     }
 
@@ -103,7 +120,7 @@ class CatView extends BaseView {
         let text = this.props.showTextReducer.text;
         return <div ref="wrapper" className="CatView__wrapper">
             {text && <Text text={text}/>}
-            <img className="CatView__cat" onClick={()=>this.runTextSequence()} src={catImage} alt=""/>
+            <img className="CatView__cat" ref="image" onClick={() => this.runTextSequence()} src={catImage} alt=""/>
         </div>;
     }
 

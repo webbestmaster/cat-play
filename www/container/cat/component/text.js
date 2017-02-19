@@ -4,7 +4,7 @@
 
 import React from 'react';
 import BaseView from '../../../core/Base-view';
-import {TimelineLite, Back, TweenMax, TweenLite} from 'gsap';
+import {TimelineLite, Back} from 'gsap';
 
 export default class Text extends BaseView {
 
@@ -34,7 +34,14 @@ export default class Text extends BaseView {
     }
 
     render() {
-        return <div ref="wrapper" className="CatView__text js-text-animated">{this.props.text}</div>;
+
+        let text = this.props.text.split('\n').map((chunk, i) => {
+            return <div key={i}>{chunk}</div>;
+        });
+
+        return <div ref="wrapper" className="CatView__text">
+            {text}
+            </div>;
     }
 
 }
