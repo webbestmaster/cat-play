@@ -10,6 +10,15 @@ const CONST = {
     tween: {
         moveTo: 'tween.moveTo'
     },
+    text: {
+        welcome: 'welcomeTextList',
+        welcomeTextList: [
+            'Hello! My name is XyberCat!',
+            'How are you?',
+            'Any Way I want to play with you!',
+            'The Game Has Begun!'
+        ]
+    },
     node: {
         width: 'node.width',
         height: 'node.height',
@@ -25,6 +34,8 @@ export default class CatModel extends BaseModel {
         super(args);
 
         this.const = CONST;
+
+        this.set(CONST.text.welcome, util.copyHashMap(CONST.text.welcomeTextList));
 
     }
 

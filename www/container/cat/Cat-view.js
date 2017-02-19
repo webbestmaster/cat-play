@@ -30,7 +30,6 @@ class CatView extends BaseView {
 
         view.model = model;
 
-
     }
 
     componentDidMount() {
@@ -38,11 +37,6 @@ class CatView extends BaseView {
         let view = this;
 
         view.initializeDomNode();
-
-        view.props.showTextAction('Lorem ipsum dolor sit amet, ' +
-            'consectetur adipisicing elit. Accusantium aperiam, beatae blanditiis dicta dolor, dolores, ' +
-            'ipsa mollitia optio sapiente veritatis vero voluptas! ' +
-            'Aspernatur doloribus eius expedita explicabo, ipsum itaque quam.');
 
     }
 
@@ -87,10 +81,29 @@ class CatView extends BaseView {
 
     }
 
+    runTextSequence() {
+
+        const view = this;
+        const model = view.model;
+
+        const welcomeTextList = model.get(model.const.text.welcome);
+        const message = welcomeTextList.shift();
+
+        if (message) {
+            return this.props.showTextAction(message);
+        }
+
+        this.props.showTextAction('');
+
+        console.log('end of conversation');
+
+    }
+
     render() {
+        let text = this.props.showTextReducer.text;
         return <div ref="wrapper" className="CatView__wrapper">
-            {this.props.showTextReducer.text && <Text text={this.props.showTextReducer.text}/>}
-            <img className="CatView__cat" src={catImage} alt=""/>
+            {text && <Text text={text}/>}
+            <img className="CatView__cat" onClick={()=>this.runTextSequence()} src={catImage} alt=""/>
         </div>;
     }
 
@@ -99,11 +112,9 @@ class CatView extends BaseView {
 export default connect(
     state => ({
         showTextReducer: state.catReducer.showText,
-        screen: state.screen,
-        click: state.click
+        screen: state.screen
     }),
     {
         showTextAction: showText
     }
 )(CatView);
-

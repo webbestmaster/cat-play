@@ -20,7 +20,11 @@ const prefix = (function () {
 
 export default  {
 
-    prefix
+    prefix,
+
+    copyHashMap: function (hashMap) {
+        return JSON.parse(JSON.stringify(hashMap));
+    }
 
 };
 

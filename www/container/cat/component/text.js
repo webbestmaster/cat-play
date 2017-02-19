@@ -4,14 +4,14 @@
 
 import React from 'react';
 import BaseView from '../../../core/Base-view';
-import {TimelineLite, Back, TweenMax} from 'gsap';
+import {TimelineLite, Back, TweenMax, TweenLite} from 'gsap';
 
 export default class Text extends BaseView {
 
-    componentDidMount() {
+    animateText() {
 
         let wrapperNode = this.refs.wrapper,
-            mySplitText = new SplitText('.js-text-animated', {type: 'words, chars'}),
+            mySplitText = new SplitText(wrapperNode, {type: 'words, chars'}),
             chars = mySplitText.chars,
             tl = new TimelineLite({
                 onComplete: function () {
@@ -19,10 +19,18 @@ export default class Text extends BaseView {
                 }
             });
 
-        tl.set(wrapperNode, {alpha: 0})
-            .to(wrapperNode, 0.75, {y: '-100%', alpha: 1, ease: Back.easeOut.config(1.4)})
-            .staggerFrom(chars, 0.05, {opacity: 0, ease: Back.easeOut}, 0.03);
+        tl
+            .fromTo(wrapperNode, 0.75, {alpha: 0, y: '0%'}, {y: '-100%', alpha: 1, ease: Back.easeOut.config(1.4)})
+            .staggerFrom(chars, 0.05, {opacity: 0}, 0.03);
 
+    }
+
+    componentDidUpdate() {
+        this.animateText();
+    }
+
+    componentDidMount() {
+        this.animateText();
     }
 
     render() {
