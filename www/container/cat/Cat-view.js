@@ -9,7 +9,7 @@ import CatModel from './Cat-model';
 import Text from './component/text';
 import {TimelineLite, Back} from 'gsap';
 
-import {showText, setIsTexting} from './action/index';
+import {showText} from './action/index';
 
 const catImage = require('./img/cat.svg');
 
@@ -50,6 +50,7 @@ class CatView extends BaseView {
                 onComplete: function () {
                     this.kill();
                     view.runTextSequence();
+                    imageNode.removeAttribute('style');
                 }
             });
 
@@ -70,8 +71,10 @@ class CatView extends BaseView {
             [model.const.node.height]: minSize
         });
 
-        model.set('x', Math.round(screen.width / 2));
-        model.set('y', Math.round(screen.height / 2));
+        model.set({
+            x: Math.round(screen.width / 2),
+            y: Math.round(screen.height / 2)
+        });
 
     }
 
@@ -95,6 +98,8 @@ class CatView extends BaseView {
             x: Math.round(screen.width / 2),
             y: Math.round(screen.height / 2)
         });
+
+        model.set(model.const.state.is.texting, nextProps.setIsTextingReducer.isTexting);
 
     }
 
@@ -121,7 +126,6 @@ class CatView extends BaseView {
         return <div ref="wrapper" className="CatView__wrapper">
             {text && <Text text={text}/>}
             <img className="CatView__cat" ref="image" onClick={() => this.runTextSequence()} src={catImage} alt=""/>
-            {this.props.setIsTextingReducer.isTexting && <div>is texting !!!!!!!!!!!!!!!!!!!!!!</div>}
         </div>;
     }
 
@@ -134,7 +138,6 @@ export default connect(
         screen: state.screen
     }),
     {
-        showTextAction: showText,
-        setIsTextingAction: setIsTexting
+        showTextAction: showText
     }
 )(CatView);

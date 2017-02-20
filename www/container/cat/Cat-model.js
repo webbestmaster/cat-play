@@ -7,13 +7,19 @@ import {TimelineLite, Power0} from 'gsap';
 import util from './../../services/util';
 
 const CONST = {
+    state: {
+        is: {
+            texting: 'state-is-texting'
+        }
+    },
     tween: {
-        moveTo: 'tween.moveTo'
+        moveTo: 'tween.moveTo',
+        texting: 'tween.texting'
     },
     text: {
         welcome: 'welcomeTextList',
         welcomeTextList: [
-            'Hello! My name is XyberCat! \n----------\n Tap my face to continue.',
+            'Hello! My name is XyberCat!\n----------\nTap my face to continue.',
             'How are you?',
             'Any Way I want to play with you!',
             'The Game Has Begun!'
@@ -69,6 +75,34 @@ export default class CatModel extends BaseModel {
             },
             model
         );
+
+        model.onChange(CONST.state.is.texting, function (isTexting) {
+
+            console.log('isTexting --->', isTexting);
+
+            let oldTl = model.get(CONST.tween.texting),
+                imageNode = model.get('view').refs.image;
+
+            if (oldTl) {
+                console.log('isTexting ---> KILL');
+                oldTl.stop();
+                oldTl.progress(0);
+                oldTl.kill();
+                imageNode.removeAttribute('style');
+                model.set(CONST.tween.texting, null);
+            }
+
+            if (!isTexting) {
+                return;
+            }
+
+            let newTl = new TimelineLite();
+
+            newTl.to(imageNode, 0.1, {scaleY: 0.98, repeat: -1, yoyo: true});
+
+            model.set(CONST.tween.texting, newTl);
+
+        }, model);
 
     }
 
