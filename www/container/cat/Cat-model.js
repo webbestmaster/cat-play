@@ -8,13 +8,21 @@ import util from './../../services/util';
 import textConstant from './component/text-constant';
 
 const CONST = {
+    screen: {
+        width: 'screen.width',
+        height: 'screen.height',
+    },
+    corner: {
+        node: 'corner.model',
+        screen: 'corner.screen'
+    },
     state: {
         is: {
             texting: 'state-is-texting'
         }
     },
     tween: {
-        moveTo: 'tween.moveTo',
+        moveToAnimated: 'tween.moveToAnimated',
         texting: 'tween.texting'
     },
     text: {
@@ -46,6 +54,67 @@ export default class CatModel extends BaseModel {
 
     }
 
+    updateCornerAboutScreen() {
+
+        const model = this;
+
+        model.set(model.getXyCornerAboutScreen(
+            model.get(CONST.corner.node),
+            model.get(CONST.corner.screen)
+        ));
+
+    }
+
+    updateNodeSize() {
+
+        const model = this;
+        const style = model.get('view').refs.wrapper.style;
+        const nodeWidth = model.get(CONST.screen.width) / 4;
+        const nodeHeight = model.get(CONST.screen.height) / 4;
+
+        const nodeSize = Math.min(nodeWidth, nodeHeight);
+
+        model.set(CONST.node.width, nodeSize);
+        model.set(CONST.node.height, nodeSize);
+
+        style.width = Math.round(nodeSize) + 'px';
+        style.height = Math.round(nodeSize) + 'px';
+
+        model.set({
+            [CONST.node.halfWidth]: Math.round(nodeSize / 2),
+            [CONST.node.halfHeight]: Math.round(nodeSize / 2)
+        });
+
+    }
+
+    getXyCornerAboutScreen(cornerModel, cornerScreen) {
+
+        const model = this;
+        const screenWidth = model.get(CONST.screen.width);
+        const screenHeight = model.get(CONST.screen.height);
+        const nodeWidth = model.get(CONST.node.width);
+        const nodeHeight = model.get(CONST.node.height);
+        const screenCornerXy = util.getXyOfCorner(cornerScreen, screenWidth, screenHeight);
+        const nodeCornerXy = util.getXyOfCorner(cornerModel, nodeWidth, nodeHeight);
+
+        return {
+            x: screenCornerXy.x - nodeCornerXy.x,
+            y: screenCornerXy.y - nodeCornerXy.y
+        };
+
+    }
+
+    setCornerAboutScreen(cornerModel, cornerScreen) {
+
+        const model = this;
+
+        model.set(CONST.corner.node, cornerModel);
+        model.set(CONST.corner.screen, cornerScreen);
+
+        model.updateCornerAboutScreen();
+
+    }
+
     bindEventListeners() {
 
         const model = this;
@@ -57,22 +126,10 @@ export default class CatModel extends BaseModel {
         );
 
         model.onChange(
-            [CONST.node.width, CONST.node.height],
+            [CONST.screen.width, CONST.screen.height],
             function () {
-
-                let model = this;
-                let style = model.get('view').refs.wrapper.style;
-                let width = model.get(CONST.node.width);
-                let height = model.get(CONST.node.height);
-
-                style.width = width + 'px';
-                style.height = height + 'px';
-
-                model.set({
-                    [CONST.node.halfWidth]: Math.round(width / 2),
-                    [CONST.node.halfHeight]: Math.round(height / 2)
-                });
-
+                model.updateNodeSize();
+                model.updateCornerAboutScreen();
             },
             model
         );
@@ -105,6 +162,10 @@ export default class CatModel extends BaseModel {
 
         }, model);
 
+        model.onChange([CONST.corner.node, CONST.corner.screen], function () {
+            model.updateCornerAboutScreen();
+        }, model);
+
     }
 
     moveTo() {
@@ -115,17 +176,41 @@ export default class CatModel extends BaseModel {
         const x = model.get('x');
         const y = model.get('y');
         const view = model.get('view');
-        const nodeHalfWidth = model.get(CONST.node.halfWidth);
-        const nodeHalfHeight = model.get(CONST.node.halfHeight);
 
-        view.refs.wrapper.style[util.prefix.js + 'Transform'] = 'translate3d(' + (x - nodeHalfWidth) + 'px,' + (y - nodeHalfHeight) + 'px, 0)';
+        view.refs.wrapper.style[util.prefix.js + 'Transform'] = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px, 0)';
+
+    }
+
+    moveToAnimated(x, y, time, ease) {
+
+        return new Promise((resolve, reject) => {
+
+            let model = this;
+            let oldTl = model.get(CONST.tween.moveToAnimated);
+
+            if (oldTl) {
+                oldTl.progress(1);
+                oldTl.kill();
+            }
+
+            let tl = new TimelineLite({
+                onComplete: function () {
+                    this.kill();
+                    resolve();
+                }
+            });
+
+            tl.to(model.get('view').refs.wrapper, time, {x, y, ease});
+
+            model.set(CONST.tween.moveToAnimated, tl);
+
+        });
 
     }
 
     destroy() {
 
         let model = this;
-
 
         Object.keys(CONST.tween).forEach(tweenName => {
 

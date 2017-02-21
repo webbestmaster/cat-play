@@ -36,44 +36,43 @@ class CatView extends BaseView {
     componentDidMount() {
 
         let view = this;
+        let screen = view.props.screen;
+        let model = view.model;
 
-        view.initializeDomNode();
-        view.animateAppearing();
+        model.set({
+            [model.const.screen.width]: screen.width,
+            [model.const.screen.height]: screen.height
+        });
+
+        model.setCornerAboutScreen(5, 5);
+        view.animateAppearing()
+            .then(() => {
+                let xy = model.getXyCornerAboutScreen(2, 5);
+                return model.moveToAnimated(xy.x, xy.y, 0.75, Back.easeOut.config(1.4));
+            })
+            .then(() => {
+                model.setCornerAboutScreen(2, 5);
+                view.runTextSequence();
+            });
 
     }
 
     animateAppearing() {
 
-        let view = this,
-            imageNode = view.refs.image,
-            tl = new TimelineLite({
-                onComplete: function () {
-                    this.kill();
-                    view.runTextSequence();
-                    imageNode.removeAttribute('style');
-                }
-            });
+        return new Promise((resolve, reject) => {
 
-        tl.fromTo(imageNode, 1.2, {alpha: 0, scale: 0}, {delay: 0.3, alpha: 1, scale: 1, ease: Back.easeOut.config(1.4)});
+            let view = this,
+                imageNode = view.refs.image,
+                tl = new TimelineLite({
+                    onComplete: function () {
+                        this.kill();
+                        imageNode.removeAttribute('style');
+                        resolve();
+                    }
+                });
 
-    }
+            tl.fromTo(imageNode, 1.2, {alpha: 0, scale: 0}, {delay: 0.3, alpha: 1, scale: 1, ease: Back.easeOut.config(1.4)});
 
-    initializeDomNode() {
-
-        let view = this;
-        let model = view.model;
-        let screen = view.props.screen;
-
-        let minSize = Math.round(Math.min(screen.width, screen.height) / 4);
-
-        model.set({
-            [model.const.node.width]: minSize,
-            [model.const.node.height]: minSize
-        });
-
-        model.set({
-            x: Math.round(screen.width / 2),
-            y: Math.round(screen.height / 2)
         });
 
     }
@@ -86,17 +85,9 @@ class CatView extends BaseView {
         const model = view.model;
         const screen = nextProps.screen;
 
-        // centrize cat head
-        const minSize = Math.round(Math.min(screen.width, screen.height) / 4);
-
         model.set({
-            [model.const.node.width]: minSize,
-            [model.const.node.height]: minSize
-        });
-
-        model.set({
-            x: Math.round(screen.width / 2),
-            y: Math.round(screen.height / 2)
+            [model.const.screen.width]: screen.width,
+            [model.const.screen.height]: screen.height
         });
 
         model.set(model.const.state.is.texting, nextProps.setIsTextingReducer.isTexting);
