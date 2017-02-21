@@ -8,8 +8,10 @@ import BaseView from '../../../core/Base-view';
 import {TimelineLite, Back} from 'gsap';
 import BaseModel from './../../../core/Base-model';
 import {setIsTexting} from './../action/index';
+import CONST from './text-constant';
 
-const tweenText = 'tween-text';
+const CONST_mark_tac = CONST.mark.tac;
+const CONST_tween_text = CONST.tween.text;
 
 class Text extends BaseView {
 
@@ -25,7 +27,7 @@ class Text extends BaseView {
 
         let view = this,
             model = view.model,
-            oldTl = model.get(tweenText),
+            oldTl = model.get(CONST_tween_text),
             wrapperNode = view.refs.wrapper,
             mySplitText = new SplitText(wrapperNode, {type: 'words, chars'}),
             chars = mySplitText.chars,
@@ -37,7 +39,7 @@ class Text extends BaseView {
             oldTl.kill();
         }
 
-        model.set(tweenText, tl);
+        model.set(CONST_tween_text, tl);
 
         tl
             .fromTo(wrapperNode, 0.75, {alpha: 0, y: '0%'}, {y: '-100%', alpha: 1, ease: Back.easeOut.config(1.4)})
@@ -50,7 +52,17 @@ class Text extends BaseView {
                 view.props.setIsTextingAction(false);
                 view.props.text.split('\n').forEach(function (chunk, i) {
                     let domNode = view.refs['inner-text-' + i];
-                    return domNode && (domNode.textContent = chunk);
+                    if (!domNode) {
+                        return;
+                    }
+
+                    if (chunk.indexOf(CONST_mark_tac) === -1) {
+                        domNode.textContent = chunk;
+                    } else {
+                        domNode.textContent = chunk.replace(CONST_mark_tac, '');
+                        domNode.className = 'ta-center';
+                    }
+
                 });
             });
 
@@ -68,7 +80,13 @@ class Text extends BaseView {
     render() {
 
         let text = this.props.text.split('\n').map((chunk, i) => {
-            return <div ref={'inner-text-' + i} key={i}>{chunk}</div>;
+
+            if (chunk.indexOf(CONST_mark_tac) === -1) {
+                return <div ref={'inner-text-' + i} key={i}>{chunk}</div>;
+            } else {
+                return <div className="ta-center" ref={'inner-text-' + i} key={i}>{chunk.replace(CONST_mark_tac, '')}</div>;
+            }
+
         });
 
         return <div ref="wrapper" className="CatView__text">{text}</div>;

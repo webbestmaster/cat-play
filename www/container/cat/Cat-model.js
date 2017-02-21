@@ -5,6 +5,7 @@
 import BaseModel from './../../core/Base-model';
 import {TimelineLite, Power0} from 'gsap';
 import util from './../../services/util';
+import textConstant from './component/text-constant';
 
 const CONST = {
     state: {
@@ -19,10 +20,10 @@ const CONST = {
     text: {
         welcome: 'welcomeTextList',
         welcomeTextList: [
-            'Hello! My name is XyberCat!\n----------\nTap my face to continue.',
+            'Hello! My name is XyberCat!\n' + textConstant.mark.tac + '----------\nTap my face to continue.',
             'How are you?',
-            'Any Way I want to play with you!',
-            'The Game Has Begun!'
+            'Any Way I want to play with you!'
+            // 'The Game Has Begun!'
         ]
     },
     node: {

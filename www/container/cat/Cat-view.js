@@ -13,7 +13,7 @@ import {showText} from './action/index';
 
 const catImage = require('./img/cat.svg');
 
-require('./style/cat.scss');
+// require('./style/cat.scss');
 
 class CatView extends BaseView {
 

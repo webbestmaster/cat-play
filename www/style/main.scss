@@ -3,8 +3,8 @@ html {
 }
 
 body {
-  color: #333;
-  font-family: Arial, Helvetica, sans-serif;
+  color: $mainFontColor;
+  font-family: $mainFontFamily;
   font-size: 16px;
   line-height: 1.15;
   width: 100%;

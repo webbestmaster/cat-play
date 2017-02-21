@@ -27,7 +27,7 @@ class BaseModel {
 
     /**
      *
-     * @param {String|*} key
+     * @param {String|Object} key
      * @param {*} [value]
      * @return {BaseModel}
      */
