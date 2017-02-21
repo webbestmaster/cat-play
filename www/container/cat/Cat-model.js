@@ -17,8 +17,13 @@ const CONST = {
         screen: 'corner.screen'
     },
     state: {
+        behaviour: {
+            value: 'state.behaviour.value',
+            greeting: 'state.behaviour.greeting',
+            selectGame: 'state.behaviour.selectGame'
+        },
         is: {
-            texting: 'state-is-texting'
+            texting: 'state.is.texting'
         }
     },
     tween: {
@@ -32,6 +37,15 @@ const CONST = {
             'How are you?',
             'Any Way I want to play with you!'
             // 'The Game Has Begun!'
+        ],
+        selectGame: 'selectGame',
+        selectGameTextList: [
+            'Select a game!\n' + textConstant.mark.tac + 'NOW!!!\n',
+            '1 index',
+            '2 index',
+            '3 index',
+            '4 index',
+            '5 index'
         ]
     },
     node: {
@@ -51,6 +65,7 @@ export default class CatModel extends BaseModel {
         this.const = CONST;
 
         this.set(CONST.text.welcome, util.copyHashMap(CONST.text.welcomeTextList));
+        this.set(CONST.text.selectGame, util.copyHashMap(CONST.text.selectGameTextList));
 
     }
 

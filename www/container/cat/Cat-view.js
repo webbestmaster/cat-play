@@ -10,6 +10,7 @@ import Text from './component/text';
 import {TimelineLite, Back} from 'gsap';
 
 import {showText} from './action/index';
+import util from './../../services/util';
 
 const catImage = require('./img/cat.svg');
 
@@ -52,7 +53,11 @@ class CatView extends BaseView {
             })
             .then(() => {
                 model.setCornerAboutScreen(2, 5);
-                view.runTextSequence();
+                model.set(
+                    model.const.state.behaviour.value,
+                    model.const.state.behaviour.greeting
+                );
+                view.nextTextSequence();
             });
 
     }
@@ -94,21 +99,51 @@ class CatView extends BaseView {
 
     }
 
-    runTextSequence() {
+    nextTextSequence() {
 
         const view = this;
         const model = view.model;
+        let message, textList, xy;
 
-        const welcomeTextList = model.get(model.const.text.welcome);
-        const message = welcomeTextList.shift();
+        switch (model.get(model.const.state.behaviour.value)) {
 
-        if (message) {
-            return this.props.showTextAction(message);
+            case model.const.state.behaviour.greeting:
+
+                textList = model.get(model.const.text.welcome);
+                message = textList.shift();
+
+                if (message) {
+                    return view.props.showTextAction(message);
+                }
+
+                view.props.showTextAction('');
+
+                model.set(
+                    model.const.state.behaviour.value,
+                    model.const.state.behaviour.selectGame
+                );
+
+                xy = model.getXyCornerAboutScreen(8, 8);
+
+                model
+                    .moveToAnimated(xy.x, xy.y, 0.75, Back.easeOut.config(1.4))
+                    .then(() => {
+                        textList = model.get(model.const.text.selectGame);
+                        view.props.showTextAction(textList[0]);
+                    });
+
+                break;
+
+            case model.const.state.behaviour.selectGame:
+
+                textList = model.get(model.const.text.selectGame);
+                message = textList[util.getRandom(1, 5)];
+
+                view.props.showTextAction(message);
+
+                break;
+
         }
-
-        this.props.showTextAction('');
-
-        console.log('end of conversation');
 
     }
 
@@ -116,7 +151,7 @@ class CatView extends BaseView {
         let text = this.props.showTextReducer.text;
         return <div ref="wrapper" className="CatView__wrapper">
             {text && <Text text={text}/>}
-            <img className="CatView__cat" ref="image" onClick={() => this.runTextSequence()} src={catImage} alt=""/>
+            <img className="CatView__cat" ref="image" onClick={() => this.nextTextSequence()} src={catImage} alt=""/>
         </div>;
     }
 

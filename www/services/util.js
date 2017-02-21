@@ -67,7 +67,19 @@ export default  {
 
         return result;
 
+    },
+
+    getRandom(start, end) {
+
+        if (end === undefined) {
+            end = start;
+            start = 0;
+        }
+
+        end += 1;
+
+        return Math.floor( Math.random() * (end - start) + start);
+
     }
 
 };
-
