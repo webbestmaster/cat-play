@@ -130,6 +130,7 @@ class CatView extends BaseView {
                     .then(() => {
                         textList = model.get(model.const.text.selectGame);
                         view.props.showTextAction(textList[0]);
+                        model.setCornerAboutScreen(8, 8);
                     });
 
                 break;
