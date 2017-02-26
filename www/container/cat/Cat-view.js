@@ -185,8 +185,12 @@ class CatView extends BaseView {
 
     render() {
         let text = this.props.showTextReducer.text;
+        let fn = this.showTextNext;
+        let ctx = this;
+        // TODO: do fn and ctx
+
         return <div ref="wrapper" className="CatView__wrapper">
-            {text && <Text text={text}/>}
+            {text && <Text onClickFn={fn} onClickCtx={ctx} text={text}/>}
             <img onClick={e => this.showTextNext(e)} className="CatView__cat" ref="image" src={catImage} alt="cat"/>
         </div>;
     }

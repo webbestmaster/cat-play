@@ -89,7 +89,7 @@ class Text extends BaseView {
 
         });
 
-        return <div ref="wrapper" className="CatView__text">{text}</div>;
+        return <div onClick={(e) => this.props.onClickFn.call(this.props.onClickCtx, e)} ref="wrapper" className="CatView__text">{text}</div>;
     }
 
 }
