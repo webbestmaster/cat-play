@@ -5,56 +5,9 @@
 import BaseModel from './../../core/Base-model';
 import {TimelineLite, Power0} from 'gsap';
 import util from './../../services/util';
-import textConstant from './component/text-constant';
 
-const CONST = {
-    screen: {
-        width: 'screen.width',
-        height: 'screen.height',
-    },
-    corner: {
-        node: 'corner.model',
-        screen: 'corner.screen'
-    },
-    state: {
-        behaviour: {
-            value: 'state.behaviour.value',
-            greeting: 'state.behaviour.greeting',
-            selectGame: 'state.behaviour.selectGame'
-        },
-        is: {
-            texting: 'state.is.texting'
-        }
-    },
-    tween: {
-        moveToAnimated: 'tween.moveToAnimated',
-        texting: 'tween.texting'
-    },
-    text: {
-        welcome: 'welcomeTextList',
-        welcomeTextList: [
-            'Hello! My name is XyberCat!\n' + textConstant.mark.tac + '----------\nTap my face to continue.',
-            'How are you?',
-            'Any Way I want to play with you!'
-            // 'The Game Has Begun!'
-        ],
-        selectGame: 'selectGame',
-        selectGameTextList: [
-            'Select a game!\n' + textConstant.mark.tac + 'NOW!!!\n',
-            '1 index',
-            '2 index',
-            '3 index',
-            '4 index',
-            '5 index'
-        ]
-    },
-    node: {
-        width: 'node.width',
-        height: 'node.height',
-        halfWidth: 'node.halfWidth',
-        halfHeight: 'node.halfHeight'
-    }
-};
+import constant from './constant'
+const CONST = constant.model;
 
 export default class CatModel extends BaseModel {
 
@@ -62,12 +15,21 @@ export default class CatModel extends BaseModel {
 
         super(args);
 
-        this.const = CONST;
+        const model = this;
 
-        this.set(CONST.text.welcome, util.copyHashMap(CONST.text.welcomeTextList));
-        this.set(CONST.text.selectGame, util.copyHashMap(CONST.text.selectGameTextList));
+        model.updateShowTextSequencePromise();
+        // model.set(CONST.text.sequenceType.value, CONST.text.sequenceType.sequence);
+
+        // model.set(CONST.text.welcome, util.copyHashMap(CONST.text.welcomeTextList));
+        // model.set(CONST.text.selectGame, util.copyHashMap(CONST.text.selectGameTextList));
+
+        console.log(util.addToGlobalScope('cat', model));
 
     }
+
+    /////////
+    // Coordinates
+    /////////
 
     updateCornerAboutScreen() {
 
@@ -130,6 +92,10 @@ export default class CatModel extends BaseModel {
 
     }
 
+    /////////
+    // Listeners
+    /////////
+
     bindEventListeners() {
 
         const model = this;
@@ -142,14 +108,15 @@ export default class CatModel extends BaseModel {
 
         model.onChange(
             [CONST.screen.width, CONST.screen.height],
-            function () {
+            () => {
                 model.updateNodeSize();
                 model.updateCornerAboutScreen();
             },
             model
         );
 
-        model.onChange(CONST.state.is.texting, function (isTexting) {
+
+        model.onChange(CONST.state.is.texting, isTexting => {
 
             console.log('isTexting --->', isTexting);
 
@@ -177,11 +144,16 @@ export default class CatModel extends BaseModel {
 
         }, model);
 
-        model.onChange([CONST.corner.node, CONST.corner.screen], function () {
+
+        model.onChange([CONST.corner.node, CONST.corner.screen], () => {
             model.updateCornerAboutScreen();
         }, model);
 
     }
+
+    /////////
+    // Visualisation
+    /////////
 
     moveTo() {
 
@@ -222,6 +194,97 @@ export default class CatModel extends BaseModel {
         });
 
     }
+
+    /////////
+    // Texting
+    /////////
+
+    showTextSequence(textList) {
+
+        const model = this;
+
+        model.resolveTextSequencePromise();
+
+        model.updateShowTextSequencePromise();
+
+        model.set({
+            [CONST.text.current]: textList,
+            [CONST.text.currentTextIndex]: -1
+        });
+
+        model.showTextNext();
+
+        return model.get(CONST.text.promise.sequence.promise);
+
+    }
+
+    showText(text) {
+
+        const model = this;
+        const view = model.get('view');
+
+        view.props.showTextAction(text);
+
+    }
+
+    showTextNext() {
+
+        const model = this;
+        const textList = model.get(CONST.text.current);
+
+        if (!textList) {
+            return;
+        }
+
+        let currentIndex = model.get(CONST.text.currentTextIndex);
+        let nextIndex = currentIndex + 1;
+
+        if (textList[nextIndex]) {
+            model.set(CONST.text.currentTextIndex, nextIndex);
+            model.showText(textList[nextIndex]);
+            return;
+        }
+
+        model.set(CONST.text.current, null);
+
+        model.showText('');
+
+        console.log('no text more !!!');
+
+        model.resolveTextSequencePromise();
+
+    }
+
+    updateShowTextSequencePromise() {
+
+        const model = this;
+
+        const newPromise = new Promise((resolve, reject) => model.set({
+            [CONST.text.promise.sequence.resolve]: resolve,
+            [CONST.text.promise.sequence.reject]: reject
+        }));
+
+        model.set(CONST.text.promise.sequence.promise, newPromise);
+
+    }
+
+    resolveTextSequencePromise() {
+
+        const model = this;
+
+        const prevPromiseResolver = model.get(CONST.text.promise.sequence.resolve);
+
+        if (prevPromiseResolver) {
+            prevPromiseResolver();
+        }
+
+        model.set(CONST.text.promise.sequence.resolve, null);
+
+    }
+
+    /////////
+    // Destroy
+    /////////
 
     destroy() {
 

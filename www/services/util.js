@@ -18,7 +18,7 @@ const prefix = (function () {
     };
 })();
 
-export default  {
+const util = {
 
     prefix,
 
@@ -69,6 +69,7 @@ export default  {
 
     },
 
+    // [start, end] - start and end value will be included
     getRandom(start, end) {
 
         if (end === undefined) {
@@ -78,8 +79,26 @@ export default  {
 
         end += 1;
 
-        return Math.floor( Math.random() * (end - start) + start);
+        return Math.floor(Math.random() * (end - start) + start);
+
+    },
+
+    shuffle(array) {
+        return array.sort(() => Math.random() - 0.5);
+    },
+
+    copyShuffle(array) {
+        return util.shuffle(util.copyHashMap(array));
+    },
+
+    addToGlobalScope(name, value) {
+
+        console.log(win.gs = win.gs || {});
+
+        console.log(name, '- added to global scope (window.gs[youObject])', win.gs[name] = value);
 
     }
 
 };
+
+export default util;

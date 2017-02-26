@@ -11,7 +11,9 @@ import {TimelineLite, Back} from 'gsap';
 
 import {showText} from './action/index';
 import util from './../../services/util';
+import CONST from './constant';
 
+const MODEL_CONST = CONST.model;
 const catImage = require('./img/cat.svg');
 
 // require('./style/cat.scss');
@@ -23,6 +25,7 @@ class CatView extends BaseView {
 
         let view = this;
         let model = new CatModel({
+            // [MODEL_CONST.state.behaviour.value]: MODEL_CONST.state.behaviour.none,
             view: view,
             x: 0,
             y: 0
@@ -41,24 +44,39 @@ class CatView extends BaseView {
         let model = view.model;
 
         model.set({
-            [model.const.screen.width]: screen.width,
-            [model.const.screen.height]: screen.height
+            [MODEL_CONST.screen.width]: screen.width,
+            [MODEL_CONST.screen.height]: screen.height
         });
 
         model.setCornerAboutScreen(5, 5);
-        view.animateAppearing()
+
+        view
+            .animateAppearing()
             .then(() => {
-                let xy = model.getXyCornerAboutScreen(2, 5);
-                return model.moveToAnimated(xy.x, xy.y, 0.75, Back.easeOut.config(1.4));
+
+                let endX = 2,
+                    endY = 5,
+                    xy = model.getXyCornerAboutScreen(endX, endY);
+
+                return model
+                    .moveToAnimated(xy.x, xy.y, 0.75, Back.easeOut.config(1.4))
+                    .then(() => model.setCornerAboutScreen(endX, endY));
+
             })
+            .then(() => model.showTextSequence(MODEL_CONST.text.welcomeTextList))
             .then(() => {
-                model.setCornerAboutScreen(2, 5);
-                model.set(
-                    model.const.state.behaviour.value,
-                    model.const.state.behaviour.greeting
-                );
-                view.nextTextSequence();
-            });
+
+                let endX = 8,
+                    endY = 8,
+                    xy = model.getXyCornerAboutScreen(endX, endY);
+
+                return model
+                    .moveToAnimated(xy.x, xy.y, 0.75, Back.easeOut.config(1.4))
+                    .then(() => model.setCornerAboutScreen(endX, endY));
+
+            })
+            .then(() => model.showTextSequence(MODEL_CONST.text.selectGameTextList))
+            .then(() => model.showTextSequence(util.copyShuffle(MODEL_CONST.text.randomPhraseTextList)));
 
     }
 
@@ -76,7 +94,12 @@ class CatView extends BaseView {
                     }
                 });
 
-            tl.fromTo(imageNode, 1.2, {alpha: 0, scale: 0}, {delay: 0.3, alpha: 1, scale: 1, ease: Back.easeOut.config(1.4)});
+            tl.fromTo(imageNode, 1.2, {alpha: 0, scale: 0}, {
+                delay: 0.3,
+                alpha: 1,
+                scale: 1,
+                ease: Back.easeOut.config(1.4)
+            });
 
         });
 
@@ -91,25 +114,36 @@ class CatView extends BaseView {
         const screen = nextProps.screen;
 
         model.set({
-            [model.const.screen.width]: screen.width,
-            [model.const.screen.height]: screen.height
+            [MODEL_CONST.screen.width]: screen.width,
+            [MODEL_CONST.screen.height]: screen.height
         });
 
-        model.set(model.const.state.is.texting, nextProps.setIsTextingReducer.isTexting);
+        model.set(MODEL_CONST.state.is.texting, nextProps.setIsTextingReducer.isTexting);
 
     }
 
+    showTextNext(e) {
+
+        if (e && e.stopPropagation) {
+            e.stopPropagation();
+        }
+
+        this.model.showTextNext();
+
+    }
+
+/*
     nextTextSequence() {
 
         const view = this;
         const model = view.model;
         let message, textList, xy;
 
-        switch (model.get(model.const.state.behaviour.value)) {
+        switch (model.get(MODEL_CONST.state.behaviour.value)) {
 
-            case model.const.state.behaviour.greeting:
+            case MODEL_CONST.state.behaviour.greeting:
 
-                textList = model.get(model.const.text.welcome);
+                textList = model.get(MODEL_CONST.text.welcome);
                 message = textList.shift();
 
                 if (message) {
@@ -119,8 +153,8 @@ class CatView extends BaseView {
                 view.props.showTextAction('');
 
                 model.set(
-                    model.const.state.behaviour.value,
-                    model.const.state.behaviour.selectGame
+                    MODEL_CONST.state.behaviour.value,
+                    MODEL_CONST.state.behaviour.selectGame
                 );
 
                 xy = model.getXyCornerAboutScreen(8, 8);
@@ -128,16 +162,16 @@ class CatView extends BaseView {
                 model
                     .moveToAnimated(xy.x, xy.y, 0.75, Back.easeOut.config(1.4))
                     .then(() => {
-                        textList = model.get(model.const.text.selectGame);
+                        textList = model.get(MODEL_CONST.text.selectGame);
                         view.props.showTextAction(textList[0]);
                         model.setCornerAboutScreen(8, 8);
                     });
 
                 break;
 
-            case model.const.state.behaviour.selectGame:
+            case MODEL_CONST.state.behaviour.selectGame:
 
-                textList = model.get(model.const.text.selectGame);
+                textList = model.get(MODEL_CONST.text.selectGame);
                 message = textList[util.getRandom(1, 5)];
 
                 view.props.showTextAction(message);
@@ -147,12 +181,13 @@ class CatView extends BaseView {
         }
 
     }
+*/
 
     render() {
         let text = this.props.showTextReducer.text;
         return <div ref="wrapper" className="CatView__wrapper">
             {text && <Text text={text}/>}
-            <img className="CatView__cat" ref="image" onClick={() => this.nextTextSequence()} src={catImage} alt=""/>
+            <img onClick={e => this.showTextNext(e)} className="CatView__cat" ref="image" src={catImage} alt="cat"/>
         </div>;
     }
 
