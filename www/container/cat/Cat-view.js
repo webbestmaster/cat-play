@@ -25,7 +25,6 @@ class CatView extends BaseView {
 
         let view = this;
         let model = new CatModel({
-            // [MODEL_CONST.state.behaviour.value]: MODEL_CONST.state.behaviour.none,
             view: view,
             x: 0,
             y: 0
@@ -132,65 +131,12 @@ class CatView extends BaseView {
 
     }
 
-/*
-    nextTextSequence() {
-
-        const view = this;
-        const model = view.model;
-        let message, textList, xy;
-
-        switch (model.get(MODEL_CONST.state.behaviour.value)) {
-
-            case MODEL_CONST.state.behaviour.greeting:
-
-                textList = model.get(MODEL_CONST.text.welcome);
-                message = textList.shift();
-
-                if (message) {
-                    return view.props.showTextAction(message);
-                }
-
-                view.props.showTextAction('');
-
-                model.set(
-                    MODEL_CONST.state.behaviour.value,
-                    MODEL_CONST.state.behaviour.selectGame
-                );
-
-                xy = model.getXyCornerAboutScreen(8, 8);
-
-                model
-                    .moveToAnimated(xy.x, xy.y, 0.75, Back.easeOut.config(1.4))
-                    .then(() => {
-                        textList = model.get(MODEL_CONST.text.selectGame);
-                        view.props.showTextAction(textList[0]);
-                        model.setCornerAboutScreen(8, 8);
-                    });
-
-                break;
-
-            case MODEL_CONST.state.behaviour.selectGame:
-
-                textList = model.get(MODEL_CONST.text.selectGame);
-                message = textList[util.getRandom(1, 5)];
-
-                view.props.showTextAction(message);
-
-                break;
-
-        }
-
-    }
-*/
-
     render() {
-        let text = this.props.showTextReducer.text;
-        let fn = this.showTextNext;
-        let ctx = this;
-        // TODO: do fn and ctx
+        const view = this;
+        let text = view.props.showTextReducer.text;
 
         return <div ref="wrapper" className="CatView__wrapper">
-            {text && <Text onClickFn={fn} onClickCtx={ctx} text={text}/>}
+            {text && <Text onClickFn={view.showTextNext} onClickCtx={view} text={text}/>}
             <img onClick={e => this.showTextNext(e)} className="CatView__cat" ref="image" src={catImage} alt="cat"/>
         </div>;
     }
