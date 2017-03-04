@@ -71,8 +71,8 @@ export default class CatModel extends BaseModel {
         const screenHeight = model.get(CONST.screen.height);
         const nodeWidth = model.get(CONST.node.width);
         const nodeHeight = model.get(CONST.node.height);
-        const screenCornerXy = util.getXyOfCorner(cornerScreen, screenWidth, screenHeight);
-        const nodeCornerXy = util.getXyOfCorner(cornerModel, nodeWidth, nodeHeight);
+        const screenCornerXy = util.getXyOfCorner(cornerScreen || 5, screenWidth, screenHeight, [screenWidth / 10, screenHeight/ 10]);
+        const nodeCornerXy = util.getXyOfCorner(cornerModel || 5, nodeWidth, nodeHeight);
 
         return {
             x: screenCornerXy.x - nodeCornerXy.x,

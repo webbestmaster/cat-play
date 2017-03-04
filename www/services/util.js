@@ -26,43 +26,96 @@ const util = {
         return JSON.parse(JSON.stringify(hashMap));
     },
 
-    getXyOfCorner: function (corner, width, height) {
+    getXyOfCorner: function (corner, width, height, marginsArg = [0, 0, 0, 0]) {
 
-        const result = {
-            x: 0,
-            y: 0
-        };
+        let x, y;
+
+        const margin = util.paramsParser(marginsArg);
+        const mTop = margin[0];
+        const mRight = margin[1];
+        const mBottom = margin[2];
+        const mLeft = margin[3];
 
         switch (corner) {
-            case 2:
-                result.x = width / 2;
-                break;
 
+            case 1:
+                x = mLeft;
+                y = mTop;
+                break;
+            case 2:
+                x = width / 2;
+                y = mTop;
+                break;
             case 3:
-                result.x = width;
+                x = width - mRight;
+                y = mTop;
                 break;
             case 4:
-                result.y = height / 2;
+                x = mLeft;
+                y = height / 2;
                 break;
             case 5:
-                result.x = width / 2;
-                result.y = height / 2;
+                x = width / 2;
+                y = height / 2;
                 break;
             case 6:
-                result.x = width;
-                result.y = height / 2;
+                x = width - mRight;
+                y = height / 2;
                 break;
             case 7:
-                result.y = height;
+                x = mLeft;
+                y = height - mBottom;
                 break;
             case 8:
-                result.x = width / 2;
-                result.y = height;
+                x = width / 2;
+                y = height - mBottom;
                 break;
             case 9:
-                result.x = width;
-                result.y = height;
+                x = width - mRight;
+                y = height - mBottom;
                 break;
+
+            default:
+                throw 'CAN NOT DEFINE CORNER'
+
+        }
+
+        return {x, y};
+
+    },
+
+    paramsParser: function (arr) {
+
+        if (!Array.isArray(arr)) {
+            return util.paramsParser([arr]);
+        }
+
+        const result = [0, 0, 0, 0];
+
+        switch (arr.length) {
+
+            case 1:
+                result[0] = result[1] = result[2] = result[3] = arr[0];
+                break;
+            case 2:
+                result[0] = result[2] = arr[0];
+                result[1] = result[3] = arr[1];
+                break;
+            case 3:
+                result[0] = arr[0];
+                result[1] = result[3] = arr[1];
+                result[2] = arr[2];
+                break;
+            case 4:
+                result[0] = arr[0];
+                result[1] = arr[1];
+                result[2] = arr[2];
+                result[3] = arr[3];
+                break;
+
+            default:
+                throw 'CAN NOT PARSE PARAMS'
+
         }
 
         return result;
@@ -95,7 +148,7 @@ const util = {
 
         console.log(win.gs = win.gs || {});
 
-        console.log(name, '- added to global scope (window.gs[youObject])', win.gs[name] = value);
+        console.warn(name, '- added to global scope (window.gs[\'' + name + '\'])', win.gs[name] = value);
 
     }
 
