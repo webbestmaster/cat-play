@@ -1,10 +1,13 @@
 
 export default class TreeNode {
 
-    constructor() {
+    constructor(state) {
 
-        this._state = null;
-        this._children = [];
+        const treeNode = this;
+
+        treeNode.setState(state);
+
+        treeNode._children = [];
 
     }
 
@@ -21,9 +24,7 @@ export default class TreeNode {
 
         const treeNode = this;
 
-        const newTreeNode = new TreeNode();
-
-        newTreeNode.setState(state);
+        const newTreeNode = new TreeNode(state);
 
         treeNode.addChild(newTreeNode);
 
@@ -37,13 +38,12 @@ export default class TreeNode {
 
         const treeNode = this;
 
-        treeNode.getChildren().push(child);
+        const children = treeNode.getChildren();
+
+        children[children.length] = child;
 
         return treeNode;
 
     }
-
-
-
 
 }

@@ -8,70 +8,67 @@ import CONST from './tic-tac-toe-const';
 import util from './../../../services/util';
 import TreeNode from './../../../ai/tree-node';
 
+const CONST_empty = CONST.empty;
+const CONST_X = CONST.X;
+const CONST_O = CONST.O;
+
 function getTurn(field, typeOfPlayer) {
 
-    const treeNode = new TreeNode();
+    const treeNode = new TreeNode(field);
 
-    treeNode.setState(field);
-
-    const tree = getTree(treeNode, typeOfPlayer, 15);
-
-    debugger;
+    getTree(treeNode, typeOfPlayer, 8).then(result => {
+        console.log(result);
+        console.log(treeNode);
+    });
 
 }
 
 function getTree(treeNode, typeOfPlayer, deep) {
 
     if (deep === 0) {
-        return treeNode;
+        return Promise.resolve();
     }
 
-    getAvailableStates(
-        treeNode.getState(),
-        typeOfPlayer
-    )
-        .forEach(state => treeNode.createChildFromState(state));
+    return getAvailableStates(treeNode.getState(), typeOfPlayer)
+        .then(availableStates => {
 
-    treeNode.getChildren().forEach(treeNode => {
-        getTree(treeNode, switchTypeOfPlayer(typeOfPlayer), deep - 1);
-    });
+            for (let i = 0, len = availableStates.length; i < len; i += 1) {
+                treeNode.createChildFromState(availableStates[i]);
+            }
 
-    return treeNode;
+            const nextDeep = deep - 1;
+            const nextTypeOfPlayer = typeOfPlayer === CONST_X ? CONST_O : CONST_X;
 
-}
+            return Promise.all(treeNode.getChildren().map(treeNode => getTree(treeNode, nextTypeOfPlayer, nextDeep)));
 
-function switchTypeOfPlayer(typeOfPlayer) {
-    return typeOfPlayer === CONST.X ? CONST.O : CONST.X;
+        })
+        .then(() => treeNode);
+
 }
 
 function getAvailableStates(field, typeOfPlayer) {
 
-    const result = [];
+    return new Promise((resolve, reject) => {
 
-    field.forEach((column, x) => column.forEach((ceil, y) => {
+        const result = [];
 
-        if (ceil !== CONST.empty) {
-            return;
+        let x, y, width, height, column, fieldCopy;
+
+        for (x = 0, width = field.length; x < width; x += 1) {
+            column = field[x];
+            for (y = 0, height = column.length; y < height; y += 1) {
+                if (column[y] === CONST_empty) {
+                    fieldCopy = util.copyArrayOfArrays(field);
+                    fieldCopy[x][y] = typeOfPlayer;
+                    result[result.length] = fieldCopy;
+                }
+            }
         }
 
-        const fieldCopy = util.copyHashMap(field);
-        fieldCopy[x][y] = typeOfPlayer;
-        result.push(fieldCopy);
+        setTimeout(() => resolve(result), 0);
 
-    }));
-
-    return result;
+    });
 
 }
 
-
 export default getTurn;
-
-
-
-
-
-
-
-
-

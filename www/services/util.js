@@ -26,6 +26,19 @@ const util = {
         return JSON.parse(JSON.stringify(hashMap));
     },
 
+    copyArrayOfArrays: function (arrayOfArrays) {
+
+        let i = arrayOfArrays.length;
+        const newArray = new Array(i);
+
+        while (i--) {
+            newArray[i] = arrayOfArrays[i].slice();
+        }
+
+        return newArray;
+
+    },
+
     getXyOfCorner: function (corner, width, height, marginsArg = [0, 0, 0, 0]) {
 
         let x, y;

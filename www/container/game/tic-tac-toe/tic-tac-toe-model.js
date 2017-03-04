@@ -2,7 +2,7 @@ import BaseModel from './../../../core/Base-model';
 import CONST from './tic-tac-toe-const';
 import getTurn from './ai';
 
-export default class CatModel extends BaseModel {
+export default class TicTacToeModel extends BaseModel {
 
     constructor(args) {
 

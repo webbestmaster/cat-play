@@ -3,7 +3,7 @@ import BaseView from '../../../core/Base-view';
 import TicTacToeModel from './tic-tac-toe-model';
 import CONST from './tic-tac-toe-const';
 
-export default class TicTacToe extends BaseView {
+export default class TicTacToeView extends BaseView {
 
     constructor() {
         super();

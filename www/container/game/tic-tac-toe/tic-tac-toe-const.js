@@ -2,8 +2,8 @@
 export default {
 
     empty: ' ',
-    X: 'X',
-    O: 'O',
+    X: 'x',
+    O: 'o',
 
     field: {
         object: 'field.object',
