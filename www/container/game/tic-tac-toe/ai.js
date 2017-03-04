@@ -12,14 +12,11 @@ const CONST_empty = CONST.empty;
 const CONST_X = CONST.X;
 const CONST_O = CONST.O;
 
-function getTurn(field, typeOfPlayer) {
+function getTurns(field, typeOfPlayer, deep) {
 
     const treeNode = new TreeNode(field);
 
-    getTree(treeNode, typeOfPlayer, 8).then(result => {
-        console.log(result);
-        console.log(treeNode);
-    });
+    return getTree(treeNode, typeOfPlayer, deep);
 
 }
 
@@ -71,4 +68,4 @@ function getAvailableStates(field, typeOfPlayer) {
 
 }
 
-export default getTurn;
+export default getTurns;
