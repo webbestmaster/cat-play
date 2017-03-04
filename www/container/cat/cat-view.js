@@ -5,7 +5,7 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import BaseView from '../../core/Base-view';
-import CatModel from './Cat-model';
+import CatModel from './cat-model';
 import Text from './component/text';
 import {TimelineLite, Back} from 'gsap';
 

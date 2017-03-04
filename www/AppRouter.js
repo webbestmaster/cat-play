@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Router, Route, IndexRoute} from 'react-router';
 
 import {HomeView} from './container';
+import {TicTacToe} from './container';
 import {App} from './component';
 
 export default class AppRouter extends Component {
@@ -11,6 +12,8 @@ export default class AppRouter extends Component {
             <Route path="/" component={App}>
 
                 <IndexRoute component={HomeView}/>
+
+                <Route path="/game/tic-tac-toe" component={TicTacToe}/>
 
             </Route>
         </Router>;
