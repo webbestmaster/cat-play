@@ -39,6 +39,7 @@ export default class TicTacToeAi extends BaseModel {
     getTurn(field) {
 
         const model = this;
+        const deep = model.getDeep();
 
         const myWeapon = model.getWeapon();
 
@@ -48,22 +49,34 @@ export default class TicTacToeAi extends BaseModel {
             const drawFiltered = [];
             const defeatFiltered = [];
             let resultFiltered;
+            let isFullDraw = false;
+            let isFullDefeat = false;
 
-            treeNode.getAll().forEach(treeNode => {
+            util
+                .shuffle(treeNode.getAll())
+                .every(treeNode => {
 
-                const winnerWeapon = whoWin(treeNode.getState(), CONST_X_CONST_O);
+                    const winnerWeapon = whoWin(treeNode.getState(), CONST_X_CONST_O);
 
-                if (winnerWeapon === myWeapon) {
-                    return winFiltered.push(treeNode);
-                }
+                    if (winnerWeapon === myWeapon) {
+                        winFiltered.push(treeNode);
+                        return winFiltered.length <= deep;
+                    }
 
-                if (winnerWeapon === null) {
-                    return drawFiltered.push(treeNode);
-                }
+                    if (winnerWeapon === null && !isFullDraw) {
+                        drawFiltered.push(treeNode);
+                        isFullDraw = drawFiltered.length >= deep;
+                        return true;
+                    }
 
-                defeatFiltered.push(treeNode);
+                    if (!isFullDefeat) {
+                        defeatFiltered.push(treeNode);
+                        isFullDefeat = defeatFiltered.length >= deep;
+                    }
 
-            });
+                    return true;
+
+                });
 
             if (winFiltered.length) {
                 resultFiltered = winFiltered;
@@ -73,14 +86,13 @@ export default class TicTacToeAi extends BaseModel {
                 resultFiltered = defeatFiltered;
             }
 
-            resultFiltered = resultFiltered.sort((a, b) => a.getDeep() - b.getDeep());
-            let resultDeep = resultFiltered[0].getDeep();
-            return util.shuffle(
-                resultFiltered.filter(node => node.getDeep() === resultDeep)
-            )[0];
+            if (!resultFiltered.length) {
+                return [];
+            }
+
+            return resultFiltered[0].getChainOfParents();
 
         });
-
 
     }
 
@@ -88,7 +100,7 @@ export default class TicTacToeAi extends BaseModel {
 
         const model = this;
         const treeNode = new TreeNode(field);
-        const deep = model.getDeep();
+        let deep = isFieldEmpty(field) ? 3 : model.getDeep();
         const weapon = model.getWeapon();
 
         return model.growTreeNode(treeNode, weapon, deep);
@@ -98,7 +110,7 @@ export default class TicTacToeAi extends BaseModel {
     growTreeNode(treeNode, weapon, deep) {
 
         if (deep === 0) {
-            return Promise.resolve();
+            return new Promise(resolve => setTimeout(resolve, 0));
         }
 
         const model = this;
@@ -126,31 +138,91 @@ export default class TicTacToeAi extends BaseModel {
 
     }
 
+    compareFields(fieldFrom, fieldTo) {
+        return compareFields(fieldFrom, fieldTo);
+    }
+
 }
 
 
-function compareFields(nodeFrom, nodeTo) {
+function compareFields(fieldFrom, fieldTo) {
 
     const result = [];
-    const width = nodeFrom.length;
-    const height = nodeFrom[0].length;
+    const width = fieldFrom.length;
+    const height = fieldFrom[0].length;
     let x, y;
 
     for (x = 0; x < width; x += 1) {
         result[x] = [];
         for (y = 0; y < height; y += 1) {
-            result[x][y] = nodeFrom[x][y] === nodeTo[x][y];
+            result[x][y] = fieldFrom[x][y] === fieldTo[x][y];
         }
     }
 
+    return result;
+
 }
+
+const statesCache = {
+
+    cache: {},
+
+    fieldToString(field) {
+        return JSON.stringify(field);
+    },
+
+    get(key) {
+        return this.cache[key];
+    },
+
+    set(key, value) {
+        return this.cache[key] = JSON.stringify(value);
+    }
+
+};
 
 function getAvailableStates(field, weapon) {
 
-    // TODO:
-    // эта штука работает с лево на право и с верху в низ
-    // получается что правые нижние варианты будут покрыты в последнию очередь
-    // сделать алгоритм что бы направление генерации выбиралось случайно
+    const stringFromArguments = JSON.stringify(field) + weapon;
+    const cache = statesCache.get(stringFromArguments);
+
+    if (cache) {
+        return new Promise(resolve => setTimeout(() => resolve(JSON.parse(cache)), 0));
+    }
+
+    if (isFieldEmpty(field)) {
+
+        return new Promise((resolve, reject) => {
+
+            const result = [];
+
+            let x = 0, width = field.length, fieldCopy;
+
+            let extraX = (width - 1) / 2;
+
+            for (; x < width; x += 1) {
+                // first diagonal
+                fieldCopy = util.copyArrayOfArrays(field);
+                fieldCopy[x][x] = weapon;
+                result.push(fieldCopy);
+
+                // second diagonal
+                if (extraX !== x) {
+                    fieldCopy = util.copyArrayOfArrays(field);
+                    fieldCopy[x][width - x - 1] = weapon;
+                    result.push(fieldCopy);
+                }
+
+            }
+
+            statesCache.set(stringFromArguments, result);
+
+            setTimeout(() => resolve(result), 0);
+
+        });
+
+
+    }
 
     return new Promise((resolve, reject) => {
 
@@ -164,15 +236,21 @@ function getAvailableStates(field, weapon) {
                 if (column[y] === CONST_empty) {
                     fieldCopy = util.copyArrayOfArrays(field);
                     fieldCopy[x][y] = weapon;
-                    result[result.length] = fieldCopy;
+                    result.push(fieldCopy);
                 }
             }
         }
+
+        statesCache.set(stringFromArguments, result);
 
         setTimeout(() => resolve(result), 0);
 
     });
 
+}
+
+function isFieldEmpty(field) {
+    return field.every(column => column.every(ceil => ceil === CONST_empty))
 }
 
 function isWin(field, weapon) {

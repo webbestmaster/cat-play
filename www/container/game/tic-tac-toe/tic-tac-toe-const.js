@@ -1,7 +1,7 @@
 
 const X = 'X';
 const O = 'O';
-const EMPTY = 'EMPTY';
+const EMPTY = '--';
 
 export default {
 

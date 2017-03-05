@@ -42,6 +42,7 @@ export default class TicTacToeView extends BaseView {
     renderRow(indexOfRow) {
 
         const view = this;
+        const model = view.model;
         const field = view.model.get(CONST.field.object);
 
         const td = [];
@@ -50,7 +51,11 @@ export default class TicTacToeView extends BaseView {
             column.forEach((ceil, y) => {
 
                 if (y === indexOfRow) {
-                    td.push(<td>{ceil}</td>)
+                    td.push(<td onClick={() => {
+                        model.onClickIn(x, y);
+                        model.set(CONST.player.current.id, 0);
+                        model.waitForAction(0);
+                    }}>{ceil}</td>)
                 }
 
             })

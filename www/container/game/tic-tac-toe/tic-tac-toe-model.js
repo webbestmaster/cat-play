@@ -30,11 +30,11 @@ export default class TicTacToeModel extends BaseModel {
 
         const model = this;
 
+        model.set(CONST.player.current.id, playerId);
+
         const field = model.get(CONST.field.object);
         const player = model.getPlayerById(playerId);
         const playerWeapon = player.get(CONST.player.weapon.key);
-
-        model.set(CONST.player.current.id, playerId);
 
         switch (player.get(CONST.player.mind.key)) {
 
@@ -45,14 +45,36 @@ export default class TicTacToeModel extends BaseModel {
                 ticTacToeAi.setDeep(7);
                 ticTacToeAi.setWeapon(playerWeapon);
 
-                ticTacToeAi.getTurn(field).then(turn => {
+                ticTacToeAi.getTurn(field).then(tweak => {
 
-                    debugger
+                    const tweakLength = tweak.length;
 
-                    model.onClickIn(1, 0);
+                    if (tweakLength === 0 || tweakLength === 1) {
+                        throw ' I SHOULD BE CATCH!';
+                    }
+
+                    const nextField = tweak[tweak.length - 2].getState();
+
+                    const comparing = ticTacToeAi.compareFields(field, nextField);
+
+                    let nextX;
+                    let nextY;
+
+                    comparing.forEach((column, x) => column.forEach((ceil, y) => {
+                        if (ceil) {
+                            return;
+                        }
+                        nextX = x;
+                        nextY = y;
+
+                    }));
+
+                    model.onClickIn(nextX, nextY);
+
+                    model.set(CONST.player.current.id, 1);
+                    model.waitForAction(1);
 
                 });
-
 
                 break;
 

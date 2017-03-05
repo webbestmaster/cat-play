@@ -22,6 +22,18 @@ export default class TreeNode {
         return this;
     }
 
+    getChainOfParents(result = []) {
+
+        const treeNode = this;
+
+        result.push(treeNode);
+
+        let parent = treeNode.getParent();
+
+        return parent ? parent.getChainOfParents(result) : result;
+
+    }
+
     getState() {
         return this._state;
     }
