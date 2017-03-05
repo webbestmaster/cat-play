@@ -1,7 +1,8 @@
 import BaseModel from './../../../core/Base-model';
 import CONST from './tic-tac-toe-const';
-import getTurns from './ai';
+// import getTurns from './tic-tac-toe-ai';
 const _ = require('lodash');
+import TicTacToeAi from './tic-tac-toe-ai'
 
 const CONST_empty = CONST.empty;
 export default class TicTacToeModel extends BaseModel {
@@ -31,7 +32,7 @@ export default class TicTacToeModel extends BaseModel {
 
         const field = model.get(CONST.field.object);
         const player = model.getPlayerById(playerId);
-        const playerWeapon = player.get(CONST.player.weapon);
+        const playerWeapon = player.get(CONST.player.weapon.key);
 
         model.set(CONST.player.current.id, playerId);
 
@@ -39,7 +40,14 @@ export default class TicTacToeModel extends BaseModel {
 
             case CONST.player.mind.CPU:
 
-                getTurns(field, playerWeapon, 4).then(result => {
+                const ticTacToeAi = new TicTacToeAi();
+
+                ticTacToeAi.setDeep(7);
+                ticTacToeAi.setWeapon(playerWeapon);
+
+                ticTacToeAi.getTurn(field).then(turn => {
+
+                    debugger
 
                     model.onClickIn(1, 0);
 

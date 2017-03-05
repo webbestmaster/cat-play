@@ -8,7 +8,18 @@ export default class TreeNode {
         treeNode.setState(state);
 
         treeNode._children = [];
+        treeNode._parent = null;
+        treeNode._deep = 0;
 
+    }
+
+    getParent() {
+        return this._parent;
+    }
+
+    setParent(treeNode) {
+        this._parent = treeNode;
+        return this;
     }
 
     getState() {
@@ -20,6 +31,15 @@ export default class TreeNode {
         return this;
     }
 
+    getDeep() {
+        return this._deep;
+    }
+
+    setDeep(deep) {
+        this._deep = deep;
+        return this;
+    }
+
     createChildFromState(state) {
 
         const treeNode = this;
@@ -27,6 +47,8 @@ export default class TreeNode {
         const newTreeNode = new TreeNode(state);
 
         treeNode.addChild(newTreeNode);
+
+        return newTreeNode
 
     }
 
@@ -42,8 +64,57 @@ export default class TreeNode {
 
         children[children.length] = child;
 
-        return treeNode;
+        child.setParent(treeNode);
+
+        child.setDeep(treeNode.getDeep() + 1);
 
     }
+
+    where(filter) {
+
+        const treeNode = this;
+        const result = filter(treeNode) ? [treeNode] : [];
+
+        where(treeNode, filter, result);
+
+        return result;
+
+    }
+
+    getAll() {
+
+        const treeNode = this;
+
+        const result = [treeNode];
+
+        getAll(treeNode, result);
+
+        return result;
+
+    }
+
+}
+
+function getAll(treeNode, result) {
+
+    treeNode
+        .getChildren()
+        .forEach(node => {
+            result.push(node);
+            getAll(node, result);
+        });
+
+}
+
+function where(treeNode, filter, result) {
+
+    treeNode
+        .getChildren()
+        .forEach(node => {
+            if (filter(node)) {
+                result.push(node);
+            }
+            where(node, filter, result);
+        });
 
 }

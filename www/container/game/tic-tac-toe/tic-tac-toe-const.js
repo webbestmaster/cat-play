@@ -36,8 +36,24 @@ export default {
     },
     current: {
         state: 'current.state'
+    },
+    ai: {
+        deep: {
+            key: 'ai.deep.key'
+        },
+        weapon: {
+            key: 'ai.weapon.key'
+        },
+        difficult: {
+            key: 'ai.difficult.key',
+            ease: 'ai.difficult.ease',
+            normal: 'ai.difficult.normal',
+            hard: 'ai.difficult.hard'
+        },
+        whoWin: {
+            key: 'ai.whoWin.key'
+        }
     }
-
 
 };
 
