@@ -40,28 +40,90 @@ export default class TicTacToeAi extends BaseModel {
 
         const model = this;
         const myWeapon = model.getWeapon();
+        const enemyWeapon = changeWeapon(myWeapon);
 
         return model.getTree(field).then(treeNode => {
 
-            const winFiltered = [];
-            const drawFiltered = [];
-            const defeatFiltered = [];
-            let resultFiltered;
+            // filter for 100% defeat at next turn
+            const nextTreeNodes = treeNode.getChildren().filter(nextNode => {
+
+                if (!nextNode.hasChildren()) {
+                    return true;
+                }
+
+                const myState = nextNode.getState();
+
+                const nextEnemyStates = getAvailableStates(myState, enemyWeapon);
+
+                const isEnemyWin = nextEnemyStates.some(nextEnemyState => whoWin(nextEnemyState, CONST_X_CONST_O) === enemyWeapon);
+
+                return !isEnemyWin;
+
+            });
+
+            // 100% defeat
+            if (nextTreeNodes.length === 0) {
+                return treeNode.getChildren()[0];
+            }
+
+            // filter to win in next turn
+            const winNodes = nextTreeNodes.filter(nextNode => {
+                const myState = nextNode.getState();
+                const winner = whoWin(myState, CONST_X_CONST_O);
+                return winner === myWeapon;
+            });
+
+            if (winNodes.length) {
+                return util.shuffle(winNodes)[0];
+            }
+
+            nextTreeNodes.forEach(nextNode => {
+
+                const childFree =  nextNode.findNodes( child => child.getDeep() === 2);
+
+                debugger
+
+
+            });
+
 
             treeNode
                 .getAll()
                 .forEach(treeNode => {
 
-                    const winnerWeapon = whoWin(treeNode.getState(), CONST_X_CONST_O);
+                    const state = treeNode.getState();
+                    const winnerWeapon = whoWin(state, CONST_X_CONST_O);
+                    let isNextDefeat;
 
-                    if (winnerWeapon === myWeapon) {
-                        winFiltered.push(treeNode);
-                        return;
-                    }
+                    if (winnerWeapon === myWeapon || winnerWeapon === null) {
 
-                    if (winnerWeapon === null) {
-                        drawFiltered.push(treeNode);
-                        return;
+                        const parents = treeNode.getChainOfParents();
+
+                        isNextDefeat = !parents.every(treeNode => {
+
+                            const state = treeNode.getState();
+
+                            if (!treeNode.hasChildren()) {
+                                return true;
+                            }
+
+                            const nextStates = getAvailableStates(state,);
+                            return nextStates.every(nextState => whoWin(nextState, CONST_X_CONST_O) !== enemyWeapon);
+
+                        });
+
+                        if (isNextDefeat) {
+                            return defeatFiltered.push(treeNode);
+                        }
+
+                        if (winnerWeapon === myWeapon) {
+                            return winFiltered.push(treeNode);
+                        }
+
+                        if (winnerWeapon === null) {
+                            return drawFiltered.push(treeNode);
+                        }
+
                     }
 
                     defeatFiltered.push(treeNode);
@@ -76,11 +138,9 @@ export default class TicTacToeAi extends BaseModel {
                 resultFiltered = defeatFiltered;
             }
 
-            if (!resultFiltered.length) {
-                return [];
-            }
 
-            return resultFiltered.sort((a, b) => a.getDeep() - b.getDeep())[0].getChainOfParents();
+            return nextTreeNodes.sort((a, b) => a.getDeep() - b.getDeep())[0].getChainOfParents();
+            // return util.shuffle(resultFiltered)[0].getChainOfParents();
 
         });
 
@@ -100,7 +160,7 @@ export default class TicTacToeAi extends BaseModel {
     growTreeNode(treeNode, weapon, deep) {
 
         if (deep === 0) {
-            return new Promise(resolve => setTimeout(resolve, 0));
+            return Promise.resolve();
         }
 
         const model = this;
@@ -111,7 +171,16 @@ export default class TicTacToeAi extends BaseModel {
             return Promise.resolve();
         }
 
-        return getAvailableStates(state, weapon)
+        return new Promise(
+            resolve => {
+
+                const result = isFieldEmpty(state) ?
+                    getAvailableStatesFromEmpty(state, weapon) :
+                    getAvailableStates(state, weapon);
+
+                setTimeout(() => resolve(result), 0);
+
+            })
             .then(availableStates => {
 
                 for (let i = 0, len = availableStates.length; i < len; i += 1) {
@@ -119,7 +188,7 @@ export default class TicTacToeAi extends BaseModel {
                 }
 
                 const nextDeep = deep - 1;
-                const nextWeapon = weapon === CONST_X ? CONST_O : CONST_X;
+                const nextWeapon = changeWeapon(weapon);
 
                 return Promise.all(treeNode.getChildren().map(treeNode => model.growTreeNode(treeNode, nextWeapon, nextDeep)));
 
@@ -128,29 +197,34 @@ export default class TicTacToeAi extends BaseModel {
 
     }
 
+    /**
+     * CLEAR
+     * @param fieldFrom
+     * @param fieldTo
+     * @returns {Array}
+     */
     compareFields(fieldFrom, fieldTo) {
-        return compareFields(fieldFrom, fieldTo);
+
+        const result = [];
+        const width = fieldFrom.length;
+        const height = fieldFrom[0].length;
+        let x, y;
+
+        for (x = 0; x < width; x += 1) {
+            result[x] = [];
+            for (y = 0; y < height; y += 1) {
+                result[x][y] = fieldFrom[x][y] === fieldTo[x][y];
+            }
+        }
+
+        return result;
+
     }
 
 }
 
-
-function compareFields(fieldFrom, fieldTo) {
-
-    const result = [];
-    const width = fieldFrom.length;
-    const height = fieldFrom[0].length;
-    let x, y;
-
-    for (x = 0; x < width; x += 1) {
-        result[x] = [];
-        for (y = 0; y < height; y += 1) {
-            result[x][y] = fieldFrom[x][y] === fieldTo[x][y];
-        }
-    }
-
-    return result;
-
+function changeWeapon(weapon) {
+    return weapon === CONST_X ? CONST_O : CONST_X;
 }
 
 const statesCache = {
@@ -177,65 +251,63 @@ function getAvailableStates(field, weapon) {
     const cache = statesCache.get(stringFromArguments);
 
     if (cache) {
-        return new Promise(resolve => setTimeout(() => resolve(JSON.parse(cache)), 0));
+        return JSON.parse(cache);
     }
 
-    if (isFieldEmpty(field)) {
+    const result = [];
 
-        return new Promise((resolve, reject) => {
+    let x, y, width, height, column, fieldCopy;
 
-            const result = [];
-
-            let x = 0, width = field.length, fieldCopy;
-
-            let extraX = (width - 1) / 2;
-
-            for (; x < width; x += 1) {
-                // first diagonal
+    for (x = 0, width = field.length; x < width; x += 1) {
+        column = field[x];
+        for (y = 0, height = column.length; y < height; y += 1) {
+            if (column[y] === CONST_empty) {
                 fieldCopy = util.copyArrayOfArrays(field);
-                fieldCopy[x][x] = weapon;
+                fieldCopy[x][y] = weapon;
                 result.push(fieldCopy);
-
-                // second diagonal
-                if (extraX !== x) {
-                    fieldCopy = util.copyArrayOfArrays(field);
-                    fieldCopy[x][width - x - 1] = weapon;
-                    result.push(fieldCopy);
-                }
-
-            }
-
-            statesCache.set(stringFromArguments, result);
-
-            setTimeout(() => resolve(result), 0);
-
-        });
-
-
-    }
-
-    return new Promise((resolve, reject) => {
-
-        const result = [];
-
-        let x, y, width, height, column, fieldCopy;
-
-        for (x = 0, width = field.length; x < width; x += 1) {
-            column = field[x];
-            for (y = 0, height = column.length; y < height; y += 1) {
-                if (column[y] === CONST_empty) {
-                    fieldCopy = util.copyArrayOfArrays(field);
-                    fieldCopy[x][y] = weapon;
-                    result.push(fieldCopy);
-                }
             }
         }
+    }
 
-        statesCache.set(stringFromArguments, result);
+    statesCache.set(stringFromArguments, result);
 
-        setTimeout(() => resolve(result), 0);
+    return result;
 
-    });
+}
+
+function getAvailableStatesFromEmpty(field, weapon) {
+
+    const stringFromArguments = JSON.stringify(field) + weapon;
+    const cache = statesCache.get(stringFromArguments);
+
+    if (cache) {
+        return JSON.parse(cache);
+    }
+
+    const result = [];
+
+    let x = 0, width = field.length, fieldCopy;
+
+    let extraX = (width - 1) / 2;
+
+    for (; x < width; x += 1) {
+        // first diagonal
+        fieldCopy = util.copyArrayOfArrays(field);
+        fieldCopy[x][x] = weapon;
+        result.push(fieldCopy);
+
+        // second diagonal
+        if (extraX !== x) {
+            fieldCopy = util.copyArrayOfArrays(field);
+            fieldCopy[x][width - x - 1] = weapon;
+            result.push(fieldCopy);
+        }
+
+    }
+
+    statesCache.set(stringFromArguments, result);
+
+    return result;
 
 }
 

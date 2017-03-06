@@ -45,15 +45,9 @@ export default class TicTacToeModel extends BaseModel {
                 ticTacToeAi.setDeep(7);
                 ticTacToeAi.setWeapon(playerWeapon);
 
-                ticTacToeAi.getTurn(field).then(tweak => {
+                ticTacToeAi.getTurn(field).then(node => {
 
-                    const tweakLength = tweak.length;
-
-                    if (tweakLength === 0 || tweakLength === 1) {
-                        throw 'I SHOULD BE CATCH!';
-                    }
-
-                    const nextField = tweak[tweak.length - 2].getState();
+                    const nextField = node.getState();
 
                     const comparing = ticTacToeAi.compareFields(field, nextField);
 

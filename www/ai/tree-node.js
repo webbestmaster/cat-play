@@ -82,6 +82,16 @@ export default class TreeNode {
 
     }
 
+    findNodes(filter) {
+
+        const result = [];
+
+        findNodes(this, filter, result);
+
+        return result;
+
+    }
+
     where(filter) {
 
         const treeNode = this;
@@ -103,6 +113,10 @@ export default class TreeNode {
 
         return result;
 
+    }
+
+    hasChildren() {
+        return !!this.getChildren().length;
     }
 
 }
@@ -128,5 +142,24 @@ function where(treeNode, filter, result) {
             }
             where(node, filter, result);
         });
+
+}
+
+
+function findNodes(node, filter, result) {
+
+    if (!node.hasChildren()) {
+        return result;
+    }
+
+    node.getChildren().forEach(child => {
+
+        if (filter(child)) {
+            result.push(child);
+        }
+
+        findNodes(child, filter, result);
+
+    });
 
 }
