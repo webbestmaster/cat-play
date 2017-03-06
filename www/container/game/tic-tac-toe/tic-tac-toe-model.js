@@ -50,7 +50,7 @@ export default class TicTacToeModel extends BaseModel {
                     const tweakLength = tweak.length;
 
                     if (tweakLength === 0 || tweakLength === 1) {
-                        throw ' I SHOULD BE CATCH!';
+                        throw 'I SHOULD BE CATCH!';
                     }
 
                     const nextField = tweak[tweak.length - 2].getState();

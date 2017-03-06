@@ -39,8 +39,6 @@ export default class TicTacToeAi extends BaseModel {
     getTurn(field) {
 
         const model = this;
-        const deep = model.getDeep();
-
         const myWeapon = model.getWeapon();
 
         return model.getTree(field).then(treeNode => {
@@ -49,32 +47,24 @@ export default class TicTacToeAi extends BaseModel {
             const drawFiltered = [];
             const defeatFiltered = [];
             let resultFiltered;
-            let isFullDraw = false;
-            let isFullDefeat = false;
 
-            util
-                .shuffle(treeNode.getAll())
-                .every(treeNode => {
+            treeNode
+                .getAll()
+                .forEach(treeNode => {
 
                     const winnerWeapon = whoWin(treeNode.getState(), CONST_X_CONST_O);
 
                     if (winnerWeapon === myWeapon) {
                         winFiltered.push(treeNode);
-                        return winFiltered.length <= deep;
+                        return;
                     }
 
-                    if (winnerWeapon === null && !isFullDraw) {
+                    if (winnerWeapon === null) {
                         drawFiltered.push(treeNode);
-                        isFullDraw = drawFiltered.length >= deep;
-                        return true;
+                        return;
                     }
 
-                    if (!isFullDefeat) {
-                        defeatFiltered.push(treeNode);
-                        isFullDefeat = defeatFiltered.length >= deep;
-                    }
-
-                    return true;
+                    defeatFiltered.push(treeNode);
 
                 });
 
@@ -90,7 +80,7 @@ export default class TicTacToeAi extends BaseModel {
                 return [];
             }
 
-            return resultFiltered[0].getChainOfParents();
+            return resultFiltered.sort((a, b) => a.getDeep() - b.getDeep())[0].getChainOfParents();
 
         });
 
@@ -100,7 +90,7 @@ export default class TicTacToeAi extends BaseModel {
 
         const model = this;
         const treeNode = new TreeNode(field);
-        let deep = isFieldEmpty(field) ? 3 : model.getDeep();
+        let deep = isFieldEmpty(field) ? 5 : model.getDeep();
         const weapon = model.getWeapon();
 
         return model.growTreeNode(treeNode, weapon, deep);
