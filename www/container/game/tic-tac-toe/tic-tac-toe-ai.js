@@ -44,8 +44,15 @@ export default class TicTacToeAi extends BaseModel {
 
         return model.getTree(field).then(treeNode => {
 
+            let nextTreeNodes = treeNode.getChildren();
+
+            // add few random
+            if (isFieldEmpty(field)) {
+                return util.shuffle(nextTreeNodes)[0];
+            }
+
             // filter for 100% defeat at next turn
-            const nextTreeNodes = treeNode.getChildren().filter(nextNode => {
+            nextTreeNodes = nextTreeNodes.filter(nextNode => {
 
                 if (!nextNode.hasChildren()) {
                     // remove node if nextNode are defeat
@@ -116,7 +123,7 @@ export default class TicTacToeAi extends BaseModel {
 
         const model = this;
         const treeNode = new TreeNode(field);
-        let deep = isFieldEmpty(field) ? 5 : model.getDeep();
+        let deep = isFieldEmpty(field) ? 4 : model.getDeep();
         const weapon = model.getWeapon();
 
         return model.growTreeNode(treeNode, weapon, deep);
