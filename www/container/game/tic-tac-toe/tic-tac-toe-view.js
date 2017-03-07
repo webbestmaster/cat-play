@@ -17,6 +17,7 @@ export default class TicTacToeView extends BaseView {
 
         const model = new TicTacToeModel({
             view,
+            [CONST.ai.difficult.key]: CONST.ai.difficult.normal,
             [CONST.players.key]: [
                 new PlayerModel({
                     id: 0,

@@ -42,7 +42,13 @@ export default class TicTacToeModel extends BaseModel {
 
                 const ticTacToeAi = new TicTacToeAi();
 
-                ticTacToeAi.setDeep(7);
+                const ticTacToeAiConfig = ticTacToeAi.getConfigByDifficultAndSize(
+                    model.get(CONST.ai.difficult.key),
+                    model.get(CONST.field.width)
+                );
+
+                ticTacToeAi.setDeep(ticTacToeAiConfig[CONST.ai.deep.key]);
+
                 ticTacToeAi.setWeapon(playerWeapon);
 
                 ticTacToeAi.getTurn(field).then(node => {

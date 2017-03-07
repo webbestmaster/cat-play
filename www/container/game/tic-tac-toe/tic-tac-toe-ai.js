@@ -105,7 +105,7 @@ export default class TicTacToeAi extends BaseModel {
 
                 });
 
-                nextNode.set({ mainCounter, winCounter });
+                nextNode.set({mainCounter, winCounter});
 
             });
 
@@ -191,6 +191,47 @@ export default class TicTacToeAi extends BaseModel {
         }
 
         return result;
+
+    }
+    /**
+     * CLEAR
+     * @param difficult CONST.ai.difficult[ease|normal|hard]
+     * @param fieldSize [3|4|5]
+     * @returns {{deep: }}
+     */
+
+    getConfigByDifficultAndSize(difficult, fieldSize) {
+
+        const getConfigByDifficultConfig = [
+            [1, 1, 1], // ease
+            [2, 2, 1], // normal
+            [5, 4, 3]  // hard
+        ];
+
+        switch (difficult) {
+
+            case CONST.ai.difficult.ease:
+                difficult = 0;
+                break;
+
+            case CONST.ai.difficult.normal:
+                difficult = 1;
+                break;
+
+            case CONST.ai.difficult.hard:
+                difficult = 2;
+                break;
+
+            default:
+                throw 'CAN NOT RESOLVE DIFFICULT';
+
+        }
+
+        fieldSize -= 3;
+
+        return {
+            [CONST.ai.deep.key]: getConfigByDifficultConfig[difficult][fieldSize]
+        }
 
     }
 
@@ -388,36 +429,6 @@ function extractDiagonal(field, number) {
 function extractDiagonals(field) {
     return [0, 1].map(i => extractDiagonal(field, i));
 }
-
-function getConfigByDifficult(difficult) {
-
-    let deep;
-
-    switch (difficult) {
-
-        case CONST.ai.difficult.ease:
-            deep = 1;
-            break;
-
-        case CONST.ai.difficult.normal:
-            deep = 3;
-            break;
-
-        case CONST.ai.difficult.hard:
-            deep = 5;
-            break;
-
-        default:
-            throw 'CAN NOT RESOLVE DIFFICULT';
-
-    }
-
-    return {
-        [CONST.ai.deep.key]: deep
-    }
-
-}
-
 
 // tests
 (function () {
