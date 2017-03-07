@@ -21,13 +21,17 @@ describe('Base model', function () {
     });
 
 
-    it('set/get', () => {
+    it('set/get/changeBy', () => {
 
         model.set('key-1', 'value-1');
         assert(model.get('key-1') === 'value-1');
 
         model.set({'key-2': 'value-2'});
         assert(model.get('key-2') === 'value-2');
+
+        model.set({'key-3': 1});
+        model.changeBy('key-3', 2);
+        assert(model.get('key-3') === 3);
 
     });
 

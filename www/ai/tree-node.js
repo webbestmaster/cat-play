@@ -1,7 +1,11 @@
+import BaseModel from './../core/Base-model';
 
-export default class TreeNode {
+
+export default class TreeNode extends BaseModel {
 
     constructor(state) {
+
+        super();
 
         const treeNode = this;
 
@@ -103,6 +107,12 @@ export default class TreeNode {
 
     }
 
+    walk(fn) {
+
+        walk(this, fn);
+
+    }
+
     getAll() {
 
         const treeNode = this;
@@ -146,13 +156,13 @@ function where(treeNode, filter, result) {
 }
 
 
-function findNodes(node, filter, result) {
+function findNodes(treeNode, filter, result) {
 
-    if (!node.hasChildren()) {
+    if (!treeNode.hasChildren()) {
         return result;
     }
 
-    node.getChildren().forEach(child => {
+    treeNode.getChildren().forEach(child => {
 
         if (filter(child)) {
             result.push(child);
@@ -160,6 +170,16 @@ function findNodes(node, filter, result) {
 
         findNodes(child, filter, result);
 
+    });
+
+}
+
+
+function walk(treeNode, fn) {
+
+    treeNode.getChildren().forEach(child => {
+        fn(child);
+        walk(child, fn);
     });
 
 }

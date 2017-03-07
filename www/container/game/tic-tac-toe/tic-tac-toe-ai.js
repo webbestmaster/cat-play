@@ -48,7 +48,8 @@ export default class TicTacToeAi extends BaseModel {
             const nextTreeNodes = treeNode.getChildren().filter(nextNode => {
 
                 if (!nextNode.hasChildren()) {
-                    return true;
+                    // remove node if nextNode are defeat
+                    return whoWin(nextNode.getState(), CONST_X_CONST_O) !== enemyWeapon;
                 }
 
                 const myState = nextNode.getState();
@@ -74,73 +75,38 @@ export default class TicTacToeAi extends BaseModel {
             });
 
             if (winNodes.length) {
-                return util.shuffle(winNodes)[0];
+                return winNodes[0];
             }
 
+            // find node with win in future
             nextTreeNodes.forEach(nextNode => {
 
-                const childFree =  nextNode.findNodes( child => child.getDeep() === 2);
+                let mainCounter = 0;
+                let winCounter = 0;
 
-                debugger
+                nextNode.walk(node => {
 
+                    const winner = whoWin(node.getState(), CONST_X_CONST_O);
 
-            });
+                    mainCounter += 1;
 
-
-            treeNode
-                .getAll()
-                .forEach(treeNode => {
-
-                    const state = treeNode.getState();
-                    const winnerWeapon = whoWin(state, CONST_X_CONST_O);
-                    let isNextDefeat;
-
-                    if (winnerWeapon === myWeapon || winnerWeapon === null) {
-
-                        const parents = treeNode.getChainOfParents();
-
-                        isNextDefeat = !parents.every(treeNode => {
-
-                            const state = treeNode.getState();
-
-                            if (!treeNode.hasChildren()) {
-                                return true;
-                            }
-
-                            const nextStates = getAvailableStates(state,);
-                            return nextStates.every(nextState => whoWin(nextState, CONST_X_CONST_O) !== enemyWeapon);
-
-                        });
-
-                        if (isNextDefeat) {
-                            return defeatFiltered.push(treeNode);
-                        }
-
-                        if (winnerWeapon === myWeapon) {
-                            return winFiltered.push(treeNode);
-                        }
-
-                        if (winnerWeapon === null) {
-                            return drawFiltered.push(treeNode);
-                        }
-
+                    if (winner === null) {
+                        return;
                     }
 
-                    defeatFiltered.push(treeNode);
+                    winCounter += (winner === myWeapon ? 1 : -1);
 
                 });
 
-            if (winFiltered.length) {
-                resultFiltered = winFiltered;
-            } else if (drawFiltered.length) {
-                resultFiltered = drawFiltered;
-            } else {
-                resultFiltered = defeatFiltered;
-            }
+                nextNode.set({ mainCounter, winCounter });
 
+            });
 
-            return nextTreeNodes.sort((a, b) => a.getDeep() - b.getDeep())[0].getChainOfParents();
-            // return util.shuffle(resultFiltered)[0].getChainOfParents();
+            return nextTreeNodes.sort((a, b) => {
+                const ratingA = a.get('winCounter') / a.get('mainCounter');
+                const ratingB = b.get('winCounter') / b.get('mainCounter');
+                return ratingB - ratingA;
+            })[0];
 
         });
 

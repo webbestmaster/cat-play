@@ -2,8 +2,8 @@ class BaseModel {
 
     constructor(properies) {
 
-        console.log('Created Model ->', this.constructor.name);
-        console.log(this);
+        // console.log('Created Model ->', this.constructor.name);
+        // console.log(this);
 
         const model = this;
 
@@ -42,6 +42,16 @@ class BaseModel {
      */
     get(key) {
         return this._attr[key];
+    }
+
+    /**
+     *
+     * @param {String} key
+     * @param {Number} deltaValue
+     * @return {BaseModel}
+     */
+    changeBy(key, deltaValue) {
+        return this._setKeyValue(key, this.get(key) + deltaValue);
     }
 
     /**
@@ -195,7 +205,7 @@ class BaseModel {
 
         const model = this;
 
-        Object.keys(obj).forEach(function(key) {
+        Object.keys(obj).forEach(function (key) {
             model.set(key, obj[key]);
         });
 
