@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 import {showText, setIsTexting} from './show-text';
 
 export default combineReducers({

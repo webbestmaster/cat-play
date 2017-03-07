@@ -193,13 +193,13 @@ export default class TicTacToeAi extends BaseModel {
         return result;
 
     }
+
     /**
      * CLEAR
      * @param difficult CONST.ai.difficult[ease|normal|hard]
      * @param fieldSize [3|4|5]
      * @returns {{deep: }}
      */
-
     getConfigByDifficultAndSize(difficult, fieldSize) {
 
         const getConfigByDifficultConfig = [

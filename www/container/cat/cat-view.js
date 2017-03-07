@@ -10,6 +10,7 @@ import Text from './component/text';
 import {TimelineLite, Back} from 'gsap';
 
 import {showText} from './action/index';
+import {showButtonsAction} from './../view/home/action/index'
 import util from './../../services/util';
 import CONST from './constant';
 
@@ -127,6 +128,8 @@ class CatView extends BaseView {
             e.stopPropagation();
         }
 
+        this.props.showButtonsAction(true);
+
         this.model.showTextNext();
 
     }
@@ -150,6 +153,7 @@ export default connect(
         screen: state.screen
     }),
     {
-        showTextAction: showText
+        showTextAction: showText,
+        showButtonsAction: showButtonsAction
     }
 )(CatView);

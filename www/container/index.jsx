@@ -1,4 +1,4 @@
-export HomeView from './home-view'
+export HomeView from './view/home/home-view'
 export CatView from './cat/cat-view'
 
 // games

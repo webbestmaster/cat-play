@@ -11,9 +11,11 @@ class App extends Component {
     }
 
     render() {
-        return <div>
+        const props = this.props;
+        const {width, height} = props.screen;
+        return <div style={{width: width + 'px', height: height + 'px'}}>
+            {props.children}
             <CatView />
-            {this.props.children}
         </div>;
     }
 
@@ -21,10 +23,13 @@ class App extends Component {
 
 App.propTypes = {
     resizeScreen: PropTypes.func.isRequired,
-    click: PropTypes.func.isRequired
+    click: PropTypes.func.isRequired,
+    screen: PropTypes.object.isRequired
 };
 
 export default connect(
-    null,
+    state => ({
+        screen: state.screen
+    }),
     {...actions}
 )(App);

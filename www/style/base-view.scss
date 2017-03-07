@@ -1,0 +1,42 @@
+.base-view {
+  width: 100%;
+  height: 100%;
+}
+
+.base-view__center-buttons-wrapper {
+
+  width: 75%;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+
+.base-view__center-button {
+
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  border: 1px solid #314179;
+  padding: 12px 14px;
+  background-color: #5c74a9;
+  background-image: linear-gradient(to top, #7a8eb9 50%, #5c74a9 50%);
+  cursor: pointer;
+  margin: 16px 0;
+  user-select: none;
+
+  &:hover {
+    background-image: linear-gradient(to top, #889ec8 50%, #677fb8 50%);
+    border: 1px solid #3d599d;
+  }
+
+  &:active {
+    background-image: linear-gradient(to top, #61739b 50%, #48608b 50%);
+    border: 1px solid #213962;
+  }
+
+}
+

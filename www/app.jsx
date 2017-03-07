@@ -5,6 +5,7 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import {browserHistory, hashHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
+import util from './services/util';
 
 import * as reducers from './reducer';
 import AppRouter from './AppRouter';
@@ -19,6 +20,8 @@ const reducer = combineReducers({
 const store = createStore(reducer, applyMiddleware(thunk));
 
 const history = syncHistoryWithStore(hashHistory, store);
+
+window.document.documentElement.style.fontSize = util.detectFontSize() + 'px';
 
 ReactDOM.render(
     <Provider store={store}>

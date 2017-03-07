@@ -163,6 +163,22 @@ const util = {
 
         console.warn(name, '- added to global scope (window.gs[\'' + name + '\'])', win.gs[name] = value);
 
+    },
+
+    detectFontSize() {
+
+        const areaSize = docElem.clientWidth * docElem.clientHeight;
+        const minAreaSize = 320 * 480; // iPhone4 css pixels
+        const minFontSize = 16;
+        const maxFontSize = 22;
+
+        let fontSize = Math.round(minFontSize * areaSize / minAreaSize);
+
+        fontSize = Math.max(minFontSize, fontSize);
+        fontSize = Math.min(maxFontSize, fontSize);
+
+        return fontSize;
+
     }
 
 };
