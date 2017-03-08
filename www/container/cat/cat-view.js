@@ -72,7 +72,10 @@ class CatView extends BaseView {
 
                 return model
                     .moveToAnimated(xy.x, xy.y, 0.75, Back.easeOut.config(1.4))
-                    .then(() => model.setCornerAboutScreen(endX, endY));
+                    .then(() => {
+                        model.setCornerAboutScreen(endX, endY);
+                        view.props.showButtonsAction(true);
+                    })
 
             })
             .then(() => model.showTextSequence(MODEL_CONST.text.selectGameTextList))
@@ -127,8 +130,6 @@ class CatView extends BaseView {
         if (e && e.stopPropagation) {
             e.stopPropagation();
         }
-
-        this.props.showButtonsAction(true);
 
         this.model.showTextNext();
 
