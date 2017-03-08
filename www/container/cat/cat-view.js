@@ -16,6 +16,8 @@ import CONST from './constant';
 
 const MODEL_CONST = CONST.model;
 const catImage = require('./img/cat.svg');
+import i18n from './../../services/i18n';
+const getTranslate = i18n.get;
 
 // require('./style/cat.scss');
 
@@ -63,7 +65,7 @@ class CatView extends BaseView {
                     .then(() => model.setCornerAboutScreen(endX, endY));
 
             })
-            .then(() => model.showTextSequence(MODEL_CONST.text.welcomeTextList))
+            .then(() => model.showTextSequence(getTranslate('welcomeTextList')))
             .then(() => {
 
                 let endX = 8,
@@ -78,8 +80,8 @@ class CatView extends BaseView {
                     })
 
             })
-            .then(() => model.showTextSequence(MODEL_CONST.text.selectGameTextList))
-            .then(() => model.showTextSequence(util.copyShuffle(MODEL_CONST.text.randomPhraseTextList)));
+            .then(() => model.showTextSequence(getTranslate('selectGameTextList')))
+            .then(() => model.showTextSequence(util.copyShuffle(getTranslate('randomPhraseTextList'))));
 
     }
 
