@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import BaseView from '../../../core/Base-view';
 import TicTacToeModel from './tic-tac-toe-model';
 import CONST from './tic-tac-toe-const';
 import PlayerModel from './player-model';
+import {connect} from 'react-redux';
 
-export default class TicTacToeView extends BaseView {
+class TicTacToeView extends BaseView {
 
     constructor() {
 
@@ -40,49 +41,69 @@ export default class TicTacToeView extends BaseView {
 
     }
 
+    getCeilSize() {
+        const {width, height} = this.props.screen;
+        return Math.round(Math.min(width, height) / 4);
+    }
+
     renderRow(indexOfRow) {
 
         const view = this;
         const model = view.model;
-        const field = view.model.get(CONST.field.object);
-
+        const field = model.get(CONST.field.object);
+        const ceilSize = view.getCeilSize();
         const td = [];
 
         field.forEach((column, x) => {
             column.forEach((ceil, y) => {
-
-                if (y === indexOfRow) {
-                    td.push(<td onClick={() => {
+                if (y !== indexOfRow) {
+                    return;
+                }
+                td.push(
+                    <div className="tic-tac-toe__ceil" key={x + '-' + y} onClick={() => {
                         model.onClickIn(x, y);
                         model.set(CONST.player.current.id, 0);
                         model.waitForAction(0);
-                    }}>{ceil}</td>)
-                }
-
-            })
+                    }} style={{width: ceilSize + 'px', height: ceilSize + 'px'}}>{ceil}</div>
+                )
+            });
 
         });
 
-        return <tr key={indexOfRow}>{td}</tr>;
-
+        return td;
 
     }
 
     render() {
 
         const view = this;
+        const ceilSize = view.getCeilSize();
         const field = view.model.get(CONST.field.object);
 
-        return <div>
+        return <div className="base-view">
 
-            <table>
-                <tbody>
+            <div className="tic-tac-toe__field" style={{
+                width: ceilSize * 3 + 'px',
+                height: ceilSize * 3 + 'px'
+            }}>
+
                 {field[0].map((ceil, i) => view.renderRow(i))}
-                </tbody>
-            </table>
+
+            </div>
 
         </div>;
 
     }
 
 }
+
+TicTacToeView.propTypes = {
+    screen: PropTypes.object.isRequired
+};
+
+export default connect(
+    state => ({
+        screen: state.screen
+    }),
+    {}
+)(TicTacToeView);

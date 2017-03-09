@@ -25,18 +25,14 @@ class HomeView extends BaseView {
             </div>
 
             <div className="base-view__center-buttons-wrapper">
-                {props.showButtonsReducer.isShowButtons && [
-                    <Link className="js-show-me base-view__center-button" to="/game/tic-tac-toe">{getTranslate('ticTacToe')}</Link>,
-                    <Link className="js-show-me base-view__center-button" to="/game/tic-tac-toe">Tic Tac Toe</Link>,
-                    <Link className="js-show-me base-view__center-button" to="/game/tic-tac-toe">Tic Tac Toe</Link>
-                ]}
+                {props.showButtonsReducer.isShowButtons &&
+                <Link className="base-view__center-button" to="/game/tic-tac-toe">{getTranslate('ticTacToe')}</Link>}
             </div>
         </div>;
 
     }
 
 }
-
 
 export default connect(
     state => ({

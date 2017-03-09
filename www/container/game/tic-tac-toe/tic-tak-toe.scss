@@ -1,0 +1,11 @@
+.tic-tac-toe__field {
+  @extend .serv__clear-self;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+.tic-tac-toe__ceil {
+  float: left;
+}
