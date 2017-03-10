@@ -7,3 +7,6 @@ export catReducer from '../container/cat/reducer/index';
 
 // Home
 export homeReducer from '../container/view/home/reducer/index'
+
+// tic-tac-toe
+export ticTacToeReducer from './../container/game/tic-tac-toe/reducer';

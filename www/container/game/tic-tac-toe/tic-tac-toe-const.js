@@ -61,7 +61,9 @@ export default {
         whoWin: {
             key: 'ai.whoWin.key'
         }
-    }
+    },
+
+    SET_READY_TO_PLAY: 'SET_READY_TO_PLAY'
 
 };
 
