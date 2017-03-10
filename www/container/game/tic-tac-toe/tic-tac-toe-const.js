@@ -9,6 +9,14 @@ export default {
     X: X,
     O: O,
 
+    model: {
+        isOnClickEnabled: {
+            key: 'model.isOnClickEnabled.key',
+            enabled: 'model.isOnClickEnabled.enabled',
+            disabled: 'model.isOnClickEnabled.disabled'
+        }
+    },
+
     players: {
         key: 'players.key'
     },

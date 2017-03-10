@@ -18,6 +18,7 @@ class TicTacToeView extends BaseView {
 
         const model = new TicTacToeModel({
             view,
+            [CONST.model.isOnClickEnabled.key]: CONST.model.isOnClickEnabled.enabled,
             [CONST.ai.difficult.key]: CONST.ai.difficult.normal,
             [CONST.players.key]: [
                 new PlayerModel({
@@ -61,9 +62,15 @@ class TicTacToeView extends BaseView {
                 }
                 td.push(
                     <div className="tic-tac-toe__ceil" key={x + '-' + y} onClick={() => {
-                        model.onClickIn(x, y);
-                        model.set(CONST.player.current.id, 0);
-                        model.waitForAction(0);
+
+                        const wasClick = model.onClickIn(x, y);
+
+                        if (!wasClick) {
+                            return;
+                        }
+
+                        model.waitForAction(model.getNextPlayerId());
+
                     }} style={{width: ceilSize + 'px', height: ceilSize + 'px'}}>{ceil}</div>
                 )
             });

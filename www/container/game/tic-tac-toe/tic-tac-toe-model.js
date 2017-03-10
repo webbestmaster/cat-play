@@ -40,6 +40,11 @@ export default class TicTacToeModel extends BaseModel {
 
             case CONST.player.mind.CPU:
 
+                model.set(
+                    CONST.model.isOnClickEnabled.key,
+                    CONST.model.isOnClickEnabled.disabled
+                );
+
                 const ticTacToeAi = new TicTacToeAi();
 
                 const ticTacToeAiConfig = ticTacToeAi.getConfigByDifficultAndSize(
@@ -69,10 +74,14 @@ export default class TicTacToeModel extends BaseModel {
 
                     }));
 
+                    model.set(
+                        CONST.model.isOnClickEnabled.key,
+                        CONST.model.isOnClickEnabled.enabled
+                    );
+
                     model.onClickIn(nextX, nextY);
 
-                    model.set(CONST.player.current.id, 1);
-                    model.waitForAction(1);
+                    model.waitForAction(model.getNextPlayerId());
 
                 });
 
@@ -93,6 +102,21 @@ export default class TicTacToeModel extends BaseModel {
 
     }
 
+    getNextPlayerId() {
+
+        const model = this;
+
+        const currentPlayerId = model.get(CONST.player.current.id);
+        const players = model.get(CONST.players.key);
+
+        if (players[currentPlayerId + 1]) {
+            return currentPlayerId + 1;
+        }
+
+        return 0;
+
+    }
+
     getPlayerById(id) {
 
         const model = this;
@@ -103,6 +127,7 @@ export default class TicTacToeModel extends BaseModel {
 
     }
 
+    // return true if all is ok
     onClickIn(x, y) {
 
         // TODO: check for
@@ -110,14 +135,29 @@ export default class TicTacToeModel extends BaseModel {
         // 2 - current player CAN TO TO TURN
 
         const model = this;
+
+        if (model.get(CONST.model.isOnClickEnabled.key) !== CONST.model.isOnClickEnabled.enabled) {
+            console.log('ON CLICK IS DISABLED');
+            return false;
+        }
+
         const player = model.getCurrentPlayer();
         const playerWeapon = player.get(CONST.player.weapon.key);
 
         const field = model.get(CONST.field.object);
 
+        const ceil = field[x][y];
+
+        if (ceil !== CONST_empty) {
+            console.log('CEIL IS NOT EMPTY');
+            return false;
+        }
+
         field[x][y] = playerWeapon;
 
         model.get('view').forceUpdate();
+
+        return true;
 
     }
 
