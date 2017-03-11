@@ -4,7 +4,7 @@ import TicTacToeModel from './tic-tac-toe-model';
 import CONST from './tic-tac-toe-const';
 import PlayerModel from './player-model';
 import {connect} from 'react-redux';
-import {setIsReadyToPlay} from "./action";
+import {setIsReadyToPlay} from './action';
 
 class TicTacToeView extends BaseView {
 
