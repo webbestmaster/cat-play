@@ -4,7 +4,7 @@ import TicTacToeModel from './tic-tac-toe-model';
 import CONST from './tic-tac-toe-const';
 import PlayerModel from './player-model';
 import {connect} from 'react-redux';
-import {setIsReadyToPlay} from './action';
+import {setIsReadyToPlay} from "./action";
 
 class TicTacToeView extends BaseView {
 
@@ -17,18 +17,20 @@ class TicTacToeView extends BaseView {
         const fieldWidth = 3;
         const fieldHeight = 3;
 
-        const model = new TicTacToeModel({
+        view.model = new TicTacToeModel({
             view,
             [CONST.model.isOnClickEnabled.key]: CONST.model.isOnClickEnabled.enabled,
             [CONST.ai.difficult.key]: CONST.ai.difficult.hard,
             [CONST.players.key]: [
                 new PlayerModel({
                     id: 0,
+                    [CONST.player.score.key]: 0,
                     [CONST.player.mind.key]: CONST.player.mind.CPU,
                     [CONST.player.weapon.key]: CONST.player.weapon.X
                 }),
                 new PlayerModel({
                     id: 1,
+                    [CONST.player.score.key]: 0,
                     [CONST.player.mind.key]: CONST.player.mind.Human,
                     [CONST.player.weapon.key]: CONST.player.weapon.O
                 })
@@ -36,9 +38,6 @@ class TicTacToeView extends BaseView {
             [CONST.field.width]: fieldWidth,
             [CONST.field.height]: fieldHeight
         });
-
-
-        view.model = model;
 
     }
 
@@ -73,9 +72,9 @@ class TicTacToeView extends BaseView {
                             return;
                         }
 
-                        model.waitForAction(model.getNextPlayerId());
+                        model.nextTurn();
 
-                    }} style={{width: ceilSize + 'px', height: ceilSize + 'px'}}>{ceil}</div>
+                    }} style={{width: ceilSize + 'px', height: ceilSize + 'px'}}>{x + '-' + y} {ceil}</div>
                 )
             });
 
@@ -88,18 +87,23 @@ class TicTacToeView extends BaseView {
     renderField() {
 
         const view = this;
+        const model = view.model;
         const ceilSize = view.getCeilSize();
         const field = view.model.get(CONST.field.object);
+        const players = model.get(CONST.players.key);
 
+        return [
+            <div key="todo:add-normal-key-1">score 1: {players[0].get(CONST.player.score.key)}</div>,
+            <div key="todo:add-normal-key-2">score 2: {players[1].get(CONST.player.score.key)}</div>,
+            <div key="todo:add-normal-key-3" className="tic-tac-toe__field" style={{
+                width: ceilSize * 3 + 'px',
+                height: ceilSize * 3 + 'px'
+            }}>
 
-        return <div className="tic-tac-toe__field" style={{
-            width: ceilSize * 3 + 'px',
-            height: ceilSize * 3 + 'px'
-        }}>
+                {field[0].map((ceil, i) => view.renderRow(i))}
 
-            {field[0].map((ceil, i) => view.renderRow(i))}
-
-        </div>
+            </div>
+        ]
 
     }
 
@@ -168,9 +172,12 @@ class TicTacToeView extends BaseView {
 
             <div>
                 difficult
-                <span onClick={() => view.setDifficult(difficultHard)}>  {difficultHard}  {currentDifficult === difficultHard ? '*' : ''}</span>
-                <span onClick={() => view.setDifficult(difficultNormal)}>  {difficultNormal}  {currentDifficult === difficultNormal ? '*' : ''}</span>
-                <span onClick={() => view.setDifficult(difficultEase)}>  {difficultEase}  {currentDifficult === difficultEase ? '*' : ''}</span>
+                <span
+                    onClick={() => view.setDifficult(difficultHard)}>  {difficultHard} {currentDifficult === difficultHard ? '*' : ''}</span>
+                <span
+                    onClick={() => view.setDifficult(difficultNormal)}>  {difficultNormal} {currentDifficult === difficultNormal ? '*' : ''}</span>
+                <span
+                    onClick={() => view.setDifficult(difficultEase)}>  {difficultEase} {currentDifficult === difficultEase ? '*' : ''}</span>
             </div>
 
             <table>
@@ -194,10 +201,7 @@ class TicTacToeView extends BaseView {
                 </tr>
                 </tbody>
             </table>
-            <button onClick={() => {
-                this.props.setIsReadyToPlay(true);
-                model.waitForAction(0);
-            }}>start</button>
+            <button onClick={() => model.startGame()}>start</button>
         </div>
 
     }

@@ -26,6 +26,27 @@ export default class TicTacToeModel extends BaseModel {
 
     }
 
+    startGame() {
+
+        const model = this;
+        const view = model.get('view');
+
+        view.props.setIsReadyToPlay(true);
+
+        model.waitForAction(0);
+
+    }
+
+    nextTurn() {
+
+        // check for win
+        // check for - no any available turns
+
+        const model = this;
+        model.waitForAction(model.getNextPlayerId());
+
+    }
+
     waitForAction(playerId) {
 
         const model = this;
@@ -62,8 +83,8 @@ export default class TicTacToeModel extends BaseModel {
 
                     const comparing = ticTacToeAi.compareFields(field, nextField);
 
-                    let nextX;
-                    let nextY;
+                    let nextX = NaN;
+                    let nextY = NaN;
 
                     comparing.forEach((column, x) => column.forEach((ceil, y) => {
                         if (ceil) {
@@ -81,7 +102,10 @@ export default class TicTacToeModel extends BaseModel {
 
                     model.onClickIn(nextX, nextY);
 
-                    model.waitForAction(model.getNextPlayerId());
+                    model.nextTurn();
+
+                    {/*model.waitForAction(model.getNextPlayerId());*/
+                    }
 
                 });
 

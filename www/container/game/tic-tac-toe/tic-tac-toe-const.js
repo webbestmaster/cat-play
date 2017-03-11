@@ -22,6 +22,9 @@ export default {
     },
 
     player: {
+        score: {
+            key: 'player.score.key'
+        },
         current: {
             id: 'player.current.id'
         },
