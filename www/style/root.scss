@@ -1,10 +1,11 @@
 // libs
-@import "reset.css";
-@import "var.scss";
+@import "./reset.css";
+@import "./var.scss";
 
 // main styles
 @import "./main.scss";
 @import "./base-view.scss";
+@import "./form.scss";
 
 // component
 @import "./../container/view/home/styles/home.scss";

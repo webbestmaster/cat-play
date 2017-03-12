@@ -126,19 +126,17 @@ class TicTacToeView extends BaseView {
 
     }
 
-    changeSettingsMind() {
+    changeSettingsMind(id) {
 
         const view = this;
         const model = view.model;
 
-        const players = model.get(CONST.players.key);
+        const player = model.getPlayerById(id);
+        const playerMind = player.get(CONST.player.mind.key);
+        const cpu = CONST.player.mind.CPU;
+        const human = CONST.player.mind.Human;
 
-        players.forEach(player => {
-            const mind = player.get(CONST.player.mind.key);
-            const cpu = CONST.player.mind.CPU;
-            const human = CONST.player.mind.Human;
-            player.set(CONST.player.mind.key, mind === cpu ? human : cpu);
-        });
+        player.set(CONST.player.mind.key, playerMind === cpu ? human : cpu);
 
         view.forceUpdate();
 
@@ -168,41 +166,78 @@ class TicTacToeView extends BaseView {
         const difficultNormal = CONST.ai.difficult.normal;
         const difficultEase = CONST.ai.difficult.ease;
 
-        return <div>
-            <h1>settings</h1>
+        return <div className="form">
+            <h3 className="form__header">Settings</h3>
 
-            <div>
-                difficult
+            <h4 className="form__sub-header">Difficult</h4>
+            <div className="form__section">
                 <span
-                    onClick={() => view.setDifficult(difficultHard)}>  {difficultHard} {currentDifficult === difficultHard ? '*' : ''}</span>
+                    className={'form__text-item' + (currentDifficult === difficultEase ? ' form__text-item--selected' : '')}
+                    onClick={() => view.setDifficult(difficultEase)}>
+                    Ease
+                </span>
                 <span
-                    onClick={() => view.setDifficult(difficultNormal)}>  {difficultNormal} {currentDifficult === difficultNormal ? '*' : ''}</span>
+                    className={'form__text-item' + (currentDifficult === difficultNormal ? ' form__text-item--selected' : '')}
+                    onClick={() => view.setDifficult(difficultNormal)}>
+                    Normal
+                </span>
                 <span
-                    onClick={() => view.setDifficult(difficultEase)}>  {difficultEase} {currentDifficult === difficultEase ? '*' : ''}</span>
+                    className={'form__text-item' + (currentDifficult === difficultHard ? ' form__text-item--selected' : '')}
+                    onClick={() => view.setDifficult(difficultHard)}>
+                    Hard
+                </span>
             </div>
 
-            <table>
-                <thead>
-                <tr>
-                    <td>player's number</td>
-                    <td>X/O</td>
-                    <td>cpu/human</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>player 1</td>
-                    <td onClick={() => view.changeSettingsWeapons()}>{player0.get(CONST.player.weapon.key)}</td>
-                    <td onClick={() => view.changeSettingsMind()}>{player0.get(CONST.player.mind.key)}</td>
-                </tr>
-                <tr>
-                    <td>player 2</td>
-                    <td onClick={() => view.changeSettingsWeapons()}>{player1.get(CONST.player.weapon.key)}</td>
-                    <td onClick={() => view.changeSettingsMind()}>{player1.get(CONST.player.mind.key)}</td>
-                </tr>
-                </tbody>
-            </table>
-            <button onClick={() => model.startGame()}>start</button>
+            <h4 className="form__sub-header">Player 1</h4>
+            <div className="form__section">
+                <span
+                    className={'form__text-item' + (player0.get(CONST.player.weapon.key) === CONST.X ? ' form__text-item--selected' : '')}
+                    onClick={() => view.changeSettingsWeapons()}>
+                    X
+                </span>
+                <span
+                    className={'form__text-item' + (player0.get(CONST.player.weapon.key) === CONST.O ? ' form__text-item--selected' : '')}
+                    onClick={() => view.changeSettingsWeapons()}>
+                    O
+                </span>
+                <span
+                    className={'form__text-item' + (player0.get(CONST.player.mind.key) === CONST.player.mind.Human ? ' form__text-item--selected' : '')}
+                    onClick={() => view.changeSettingsMind(0)}>
+                    Human
+                </span>
+                <span
+                    className={'form__text-item' + (player0.get(CONST.player.mind.key) === CONST.player.mind.CPU ? ' form__text-item--selected' : '')}
+                    onClick={() => view.changeSettingsMind(0)}>
+                    CPU
+                </span>
+            </div>
+
+            <h4 className="form__sub-header">Player 2</h4>
+            <div className="form__section">
+                <span
+                    className={'form__text-item' + (player1.get(CONST.player.weapon.key) === CONST.X ? ' form__text-item--selected' : '')}
+                    onClick={() => view.changeSettingsWeapons()}>
+                    X
+                </span>
+                <span
+                    className={'form__text-item' + (player1.get(CONST.player.weapon.key) === CONST.O ? ' form__text-item--selected' : '')}
+                    onClick={() => view.changeSettingsWeapons()}>
+                    O
+                </span>
+                <span
+                    className={'form__text-item' + (player1.get(CONST.player.mind.key) === CONST.player.mind.Human ? ' form__text-item--selected' : '')}
+                    onClick={() => view.changeSettingsMind(1)}>
+                    Human
+                </span>
+                <span
+                    className={'form__text-item' + (player1.get(CONST.player.mind.key) === CONST.player.mind.CPU ? ' form__text-item--selected' : '')}
+                    onClick={() => view.changeSettingsMind(1)}>
+                    CPU
+                </span>
+            </div>
+            <div className="form__section">
+                <div className="form__button form__button--submit" onClick={() => model.startGame()}>start</div>
+            </div>
         </div>
 
     }
