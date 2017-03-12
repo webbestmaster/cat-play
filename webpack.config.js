@@ -79,6 +79,10 @@ const webpackConfig = {
             {
                 test: /\.raw$/,
                 loader: 'raw-loader'
+            },
+            {
+                test: /\.(eot|ttf|otf|woff|woff2)$/,
+                loader: 'file?name=public/fonts/[name].[ext]'
             }
         ]
     },

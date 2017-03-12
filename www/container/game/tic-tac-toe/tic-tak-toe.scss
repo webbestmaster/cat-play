@@ -9,3 +9,23 @@
 .tic-tac-toe__ceil {
   float: left;
 }
+
+.tic-tac-toe__score {
+  width: 50%;
+  float: left;
+  padding-top: 1rem;
+}
+
+.tic-tac-toe__score-label {
+  font-family: $monospaceFontFamily;
+  font-size: 1rem;
+  text-align: center;
+  padding-bottom: 0.4rem;
+}
+
+.tic-tac-toe__score-number {
+  font-family: 'segment-standard', sans-serif;
+  font-size: 2rem;
+  text-align: center;
+}
+

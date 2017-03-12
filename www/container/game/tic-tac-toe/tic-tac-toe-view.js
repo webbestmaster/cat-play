@@ -94,15 +94,23 @@ class TicTacToeView extends BaseView {
         const players = model.get(CONST.players.key);
 
         return [
-            <div key="todo:add-normal-key-1">score 1: {players[0].get(CONST.player.score.key)}</div>,
-            <div key="todo:add-normal-key-2">score 2: {players[1].get(CONST.player.score.key)}</div>,
-            <div key="todo:add-normal-key-3" className="tic-tac-toe__field" style={{
+            <div
+                key="player-score-0"
+                className="tic-tac-toe__score">
+                <p className="tic-tac-toe__score-label">Player 1</p>
+                <p className="tic-tac-toe__score-number">{players[0].get(CONST.player.score.key)}</p>
+            </div>,
+            <div
+                key="player-score-1"
+                className="tic-tac-toe__score">
+                <p className="tic-tac-toe__score-label">Player 2</p>
+                <p className="tic-tac-toe__score-number">{players[1].get(CONST.player.score.key)}</p>
+            </div>,
+            <div key="tic-tac-toe-field" className="tic-tac-toe__field" style={{
                 width: ceilSize * 3 + 'px',
                 height: ceilSize * 3 + 'px'
             }}>
-
                 {field[0].map((ceil, i) => view.renderRow(i))}
-
             </div>
         ]
 
