@@ -1,7 +1,7 @@
 
 const X = 'X';
 const O = 'O';
-const EMPTY = '--';
+const EMPTY = 'empty';
 
 export default {
 
@@ -69,6 +69,12 @@ export default {
     gameLimit: {
         key: 'gameLimit.key',
         max: 10
+    },
+
+    src: {
+        [X]: './img/x.svg',
+        [O]: './img/o.svg',
+        [EMPTY]: './img/empty.svg'
     },
 
     SET_READY_TO_PLAY: 'SET_READY_TO_PLAY'

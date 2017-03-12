@@ -5,6 +5,8 @@ import CONST from './tic-tac-toe-const';
 import PlayerModel from './player-model';
 import {connect} from 'react-redux';
 import {setIsReadyToPlay} from './action';
+import GameHeader from './../../../component/game-header/view';
+require.context('./img/', true, /\.svg$/);
 
 class TicTacToeView extends BaseView {
 
@@ -64,6 +66,9 @@ class TicTacToeView extends BaseView {
                 if (y !== indexOfRow) {
                     return;
                 }
+
+                const src = require(CONST.src[ceil]);
+
                 td.push(
                     <div className="tic-tac-toe__ceil" key={x + '-' + y} onClick={() => {
 
@@ -75,7 +80,9 @@ class TicTacToeView extends BaseView {
 
                         model.nextTurn();
 
-                    }} style={{width: ceilSize + 'px', height: ceilSize + 'px'}}>{x + '-' + y} {ceil}</div>
+                    }} style={{width: ceilSize + 'px', height: ceilSize + 'px'}}>
+                        <img className="tic-tac-toe__ceil-content" src={src} alt={ceil}/>
+                    </div>
                 )
             });
 
@@ -258,9 +265,8 @@ class TicTacToeView extends BaseView {
         // const field = view.model.get(CONST.field.object);
 
         return <div className="base-view">
-
+            <GameHeader />
             {view.props.isReadyToPlayReducer.isReady ? view.renderField() : view.renderSettings()}
-
         </div>;
 
     }
