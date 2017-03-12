@@ -52,22 +52,45 @@ class CatView extends BaseView {
 
         model.setCornerAboutScreen(5, 5);
 
-        view
-            .animateAppearing()
+        const promise = view.animateAppearing();
+
+        if (view.props.routing.locationBeforeTransitions.pathname === '/') {
+
+            promise
+                .then(() => {
+
+                    let endX = 2,
+                        endY = 5,
+                        xy = model.getXyCornerAboutScreen(endX, endY);
+
+                    return model
+                        .moveToAnimated(xy.x, xy.y, 0.75, Back.easeOut.config(1.4))
+                        .then(() => model.setCornerAboutScreen(endX, endY));
+
+                })
+                .then(() => model.showTextSequence(getTranslate('welcomeTextList')))
+                .then(() => {
+
+                    let endX = 8,
+                        endY = 8,
+                        xy = model.getXyCornerAboutScreen(endX, endY);
+
+                    return model
+                        .moveToAnimated(xy.x, xy.y, 0.75, Back.easeOut.config(1.4))
+                        .then(() => {
+                            model.setCornerAboutScreen(endX, endY);
+                            view.props.showButtonsAction(true);
+                        })
+
+                })
+                .then(() => model.showTextSequence(getTranslate('selectGameTextList')))
+                .then(() => model.showTextSequence(util.copyShuffle(getTranslate('randomPhraseTextList'))));
+
+            return;
+        }
+
+        promise
             .then(() => {
-
-                let endX = 2,
-                    endY = 5,
-                    xy = model.getXyCornerAboutScreen(endX, endY);
-
-                return model
-                    .moveToAnimated(xy.x, xy.y, 0.75, Back.easeOut.config(1.4))
-                    .then(() => model.setCornerAboutScreen(endX, endY));
-
-            })
-            .then(() => model.showTextSequence(getTranslate('welcomeTextList')))
-            .then(() => {
-
                 let endX = 8,
                     endY = 8,
                     xy = model.getXyCornerAboutScreen(endX, endY);
@@ -79,9 +102,7 @@ class CatView extends BaseView {
                         view.props.showButtonsAction(true);
                     })
 
-            })
-            .then(() => model.showTextSequence(getTranslate('selectGameTextList')))
-            .then(() => model.showTextSequence(util.copyShuffle(getTranslate('randomPhraseTextList'))));
+            });
 
     }
 
@@ -151,6 +172,7 @@ class CatView extends BaseView {
 
 export default connect(
     state => ({
+        routing: state.routing,
         showTextReducer: state.catReducer.showText,
         setIsTextingReducer: state.catReducer.setIsTexting,
         screen: state.screen
