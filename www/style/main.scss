@@ -1,4 +1,6 @@
 html {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
   display: block;
 }
 
@@ -7,5 +9,6 @@ body {
   font-family: $mainFontFamily;
   line-height: 1.25;
   font-size: 16px; // plus font-size defined from <html>, use rem to be relative from it
+  background-color: $bgColor;
   //background-color: #37c840;
 }

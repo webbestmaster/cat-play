@@ -27,6 +27,7 @@
   cursor: pointer;
   margin: 16px 0;
   user-select: none;
+  font-family: $monospaceFontFamily;
 
   &:hover {
     background-image: linear-gradient(to top, #889ec8 50%, #677fb8 50%);

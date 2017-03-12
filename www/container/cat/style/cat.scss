@@ -18,12 +18,13 @@
 .CatView__text {
   min-width: 150px;
   position: absolute;
-  background: #fff;
+  background-color: #575b65;
   border-radius: 7px;
-  padding: 7px;
-  border: 3px solid #5a8f00;
+  padding: 10px;
+  //border: 3px solid #42598a;
   font-family: $monospaceFontFamily;
 
+  /*
   &:before {
     content: "";
     position: absolute;
@@ -31,10 +32,11 @@
     left: 40px;
     border-width: 15px 15px 0;
     border-style: solid;
-    border-color: #5a8f00 transparent;
+    border-color: #42598a transparent;
     display: block;
     width: 0;
   }
+  */
 
   &:after {
     content: "";
@@ -43,7 +45,7 @@
     left: 45px;
     border-width: 10px 10px 0;
     border-style: solid;
-    border-color: #fff transparent;
+    border-color: #575b65 transparent;
     display: block;
     width: 0;
   }

@@ -9,8 +9,13 @@ const getTranslate = i18n.get;
 class HomeView extends BaseView {
 
     changeLanguage(localeName) {
+
+        const view = this;
+
         i18n.setLang(localeName);
-        this.forceUpdate();
+
+        view.props.changeLanguageAction(localeName);
+
     }
 
     render() {
@@ -19,9 +24,9 @@ class HomeView extends BaseView {
         const props = view.props;
 
         return <div className="base-view">
-            <div>
-                <button onClick={ () => view.props.changeLanguageAction('ru') }>ru</button>
-                <button onClick={ () => view.props.changeLanguageAction('en') }>en</button>
+            <div className="home-view__language">
+                <div onClick={ () => view.changeLanguage('en')} className="home-view__flag home-view__flag--en"></div>
+                <div onClick={ () => view.changeLanguage('ru')} className="home-view__flag home-view__flag--ru"></div>
             </div>
 
             <div className="base-view__center-buttons-wrapper">

@@ -13,7 +13,7 @@ export default {
     language: 'language',
 
     // tic tac toe
-    ticTacToe: 'Крестики\\Нолики',
+    ticTacToe: 'Крестики-Нолики',
     welcomeTextList: [
         'Hello! My name is XyberCat!\n' + textConstant.mark.tac + '----------\nTap my face to continue.',
         'How are you?',
