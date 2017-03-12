@@ -21,6 +21,7 @@ class TicTacToeView extends BaseView {
             view,
             [CONST.model.isOnClickEnabled.key]: CONST.model.isOnClickEnabled.enabled,
             [CONST.ai.difficult.key]: CONST.ai.difficult.hard,
+            [CONST.gameLimit.key]: CONST.gameLimit.max,
             [CONST.players.key]: [
                 new PlayerModel({
                     id: 0,

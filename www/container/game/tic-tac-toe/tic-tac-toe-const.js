@@ -66,6 +66,11 @@ export default {
         }
     },
 
+    gameLimit: {
+        key: 'gameLimit.key',
+        max: 10
+    },
+
     SET_READY_TO_PLAY: 'SET_READY_TO_PLAY'
 
 };

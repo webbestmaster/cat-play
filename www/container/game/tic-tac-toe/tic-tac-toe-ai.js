@@ -329,6 +329,10 @@ function isFieldEmpty(field) {
     return field.every(column => column.every(ceil => ceil === CONST_empty))
 }
 
+export function isFieldFull(field) {
+    return field.every(column => column.every(ceil => ceil !== CONST_empty))
+}
+
 function isWin(field, weapon) {
 
     // check column
@@ -352,7 +356,7 @@ function isWin(field, weapon) {
 
 }
 
-function whoWin(field, weapons) {
+export function whoWin(field, weapons) {
 
     let i = weapons.length,
         weapon;

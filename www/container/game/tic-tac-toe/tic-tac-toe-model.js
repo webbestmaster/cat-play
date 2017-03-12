@@ -3,8 +3,13 @@ import CONST from './tic-tac-toe-const';
 // import getTurns from './tic-tac-toe-ai';
 const _ = require('lodash');
 import TicTacToeAi from './tic-tac-toe-ai'
+import {whoWin, isFieldFull} from './tic-tac-toe-ai';
 
 const CONST_empty = CONST.empty;
+const CONST_X = CONST.X;
+const CONST_O = CONST.O;
+const CONST_X_CONST_O = [CONST_O, CONST_X];
+
 export default class TicTacToeModel extends BaseModel {
 
     constructor(args) {
@@ -39,10 +44,43 @@ export default class TicTacToeModel extends BaseModel {
 
     nextTurn() {
 
-        // check for win
-        // check for - no any available turns
+        // TODO: check for win
+        const model = this;
+        const field = model.get(CONST.field.object);
+        const winnerWeapon = whoWin(field, CONST_X_CONST_O);
+
+        if (winnerWeapon) {
+            const winner = model.getPlayerByWeapon(winnerWeapon);
+            winner.changeBy(CONST.player.score.key, 1);
+            if (winner.get(CONST.player.score.key) === model.get(CONST.gameLimit.key)) {
+                alert('game is over!!!', winnerWeapon, 'win');
+            } else {
+                model.createNextGame();
+            }
+
+            return;
+        }
+
+        if (isFieldFull(field)){
+            const players = model.get(CONST.players.key);
+            players[0].changeBy(CONST.player.score.key, 1);
+            players[1].changeBy(CONST.player.score.key, 1);
+            model.createNextGame();
+            return;
+        }
+
+        // TODO: check for - no any available turns
+        model.waitForAction(model.getNextPlayerId());
+
+    }
+
+    createNextGame() {
 
         const model = this;
+        const view = model.get('view');
+
+        model.createField();
+        view.forceUpdate();
         model.waitForAction(model.getNextPlayerId());
 
     }
@@ -104,9 +142,6 @@ export default class TicTacToeModel extends BaseModel {
 
                     model.nextTurn();
 
-                    {/*model.waitForAction(model.getNextPlayerId());*/
-                    }
-
                 });
 
                 break;
@@ -149,6 +184,15 @@ export default class TicTacToeModel extends BaseModel {
 
         return _.find(players, player => player.get('id') === id);
 
+    }
+
+    getPlayerByWeapon(weapon) {
+
+        const model = this;
+
+        const players = model.get(CONST.players.key);
+
+        return _.find(players, player => player.get(CONST.player.weapon.key) === weapon);
     }
 
     // return true if all is ok
