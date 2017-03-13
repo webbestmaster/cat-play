@@ -67,7 +67,7 @@ class TicTacToeView extends BaseView {
                     return;
                 }
 
-                const src = require(CONST.src[ceil]);
+                const src = require('./img/' + ceil.toLowerCase() + '.svg');
 
                 td.push(
                     <div className="tic-tac-toe__ceil" key={x + '-' + y} onClick={() => {
