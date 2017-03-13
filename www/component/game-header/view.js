@@ -1,31 +1,27 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+import setText from './action/setText'
 
 class GameHeader extends Component {
 
     render() {
-        return <div>
-            <div>back button</div>
-            <h1>game header</h1>
 
+        setTimeout(() => this.props.setTextAction('NEW HEADER TEXT'), 1000);
 
+        return <div className="game-header">
+            <div className="game-header__back-button">back button</div>
+            <h1>{this.props.headerTextReducer.text}</h1>
         </div>;
+
     }
 
 }
 
-/*
-App.propTypes = {
-    resizeScreen: PropTypes.func.isRequired,
-    click: PropTypes.func.isRequired,
-    screen: PropTypes.object.isRequired
-};
-*/
-
 export default connect(
     state => ({
-        // screen: state.screen
+        headerTextReducer: state.gameHeaderReducer.headerText
     }),
-    null
-    // {...actions}
+    {
+        setTextAction: setText
+    }
 )(GameHeader);
