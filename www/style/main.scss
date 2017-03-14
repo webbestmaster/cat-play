@@ -5,7 +5,7 @@ html {
 }
 
 body {
-  color: $mainFontColor;
+  color: $mainFontColorLight;
   font-family: $mainFontFamily;
   line-height: 1.25;
   font-size: 16px; // plus font-size defined from <html>, use rem to be relative from it

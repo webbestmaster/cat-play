@@ -9,8 +9,8 @@ class GameHeader extends Component {
         setTimeout(() => this.props.setTextAction('NEW HEADER TEXT'), 1000);
 
         return <div className="game-header">
-            <div className="game-header__back-button">back button</div>
-            <h1>{this.props.headerTextReducer.text}</h1>
+            <div className="game-header__back-button" />
+            <h2 className="game-header__header">{this.props.headerTextReducer.text}</h2>
         </div>;
 
     }

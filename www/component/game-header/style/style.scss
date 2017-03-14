@@ -1,8 +1,30 @@
 .game-header {
   display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  background-color: #fff;
+  height: 32px;
 }
 
 .game-header__back-button {
+  width: 32px;
+  height: 32px;
+  background-repeat: no-repeat;
   float: left;
+  background-position: center center;
+  background-size: 60% 60%;
   background-image: url(./../component/game-header/img/arrow_back.svg);
 }
+
+.game-header__header {
+  margin: 0 32px;
+  text-align: center;
+  color: $mainFontColorDark;
+  font-size: 18px;
+  padding: 6px 0 4px;
+}
+
+
