@@ -1,3 +1,4 @@
+return;
 import CONST from '../const';
 
 const initialState = {

@@ -6,6 +6,8 @@ import PlayerModel from './player-model';
 import {connect} from 'react-redux';
 import {setIsReadyToPlay} from './action';
 import GameHeader from './../../../component/game-header/view';
+import headerSetText from './../../../component/game-header/action/setText';
+import i18n from './../../../services/i18n';
 require.context('./img/', true, /\.svg$/);
 
 class TicTacToeView extends BaseView {
@@ -45,7 +47,12 @@ class TicTacToeView extends BaseView {
     }
 
     componentWillMount() {
-        this.props.setIsReadyToPlay(false);
+
+        const view = this;
+
+        view.props.headerSetText(i18n.get('good_luck') + '!');
+        view.props.setIsReadyToPlay(false);
+
     }
 
     getCeilSize() {
@@ -283,6 +290,7 @@ export default connect(
         isReadyToPlayReducer: state.ticTacToeReducer.isReadyToPlay
     }),
     {
-        setIsReadyToPlay
+        setIsReadyToPlay,
+        headerSetText
     }
 )(TicTacToeView);

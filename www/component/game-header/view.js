@@ -6,8 +6,6 @@ class GameHeader extends Component {
 
     render() {
 
-        setTimeout(() => this.props.setTextAction('NEW HEADER TEXT'), 1000);
-
         return <div className="game-header">
             <div className="game-header__back-button" />
             <h2 className="game-header__header">{this.props.headerTextReducer.text}</h2>

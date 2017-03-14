@@ -12,6 +12,10 @@ export default {
 
     language: 'language',
 
+    // other
+    // game_setup: 'игровые настройки',
+    good_luck: 'удачи!',
+
     // tic tac toe
     ticTacToe: 'Крестики-Нолики',
     welcomeTextList: [
@@ -28,7 +32,7 @@ export default {
         'Я насцу тебе в тапки пока ты будешь спать...',
         'И?...',
         'хм... Хватит кликать'
-    ]
+    ],
 
 
 }

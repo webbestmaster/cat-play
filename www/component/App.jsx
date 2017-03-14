@@ -15,7 +15,7 @@ class App extends Component {
         const {width, height} = props.screen;
         return <div style={{width: width + 'px', height: height + 'px'}}>
             {props.children}
-            <CatView />
+            {/*<CatView />*/}
         </div>;
     }
 

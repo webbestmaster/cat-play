@@ -4,6 +4,7 @@ import CONST from './tic-tac-toe-const';
 const _ = require('lodash');
 import TicTacToeAi from './tic-tac-toe-ai'
 import {whoWin, isFieldFull} from './tic-tac-toe-ai';
+import i18n from './../../../services/i18n';
 
 const CONST_empty = CONST.empty;
 const CONST_X = CONST.X;
@@ -44,8 +45,8 @@ export default class TicTacToeModel extends BaseModel {
 
     nextTurn() {
 
-        // TODO: check for win
         const model = this;
+        const view = model.get('view');
         const field = model.get(CONST.field.object);
         const winnerWeapon = whoWin(field, CONST_X_CONST_O);
 
@@ -53,8 +54,10 @@ export default class TicTacToeModel extends BaseModel {
             const winner = model.getPlayerByWeapon(winnerWeapon);
             winner.changeBy(CONST.player.score.key, 1);
             if (winner.get(CONST.player.score.key) === model.get(CONST.gameLimit.key)) {
-                alert('game is over!!!', winnerWeapon, 'win');
+                view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!');
+                alert('need return to home page!');
             } else {
+                view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!');
                 model.createNextGame();
             }
 
@@ -65,11 +68,11 @@ export default class TicTacToeModel extends BaseModel {
             const players = model.get(CONST.players.key);
             players[0].changeBy(CONST.player.score.key, 1);
             players[1].changeBy(CONST.player.score.key, 1);
+            view.props.headerSetText(i18n.get('draw') + '!');
             model.createNextGame();
             return;
         }
 
-        // TODO: check for - no any available turns
         model.waitForAction(model.getNextPlayerId());
 
     }

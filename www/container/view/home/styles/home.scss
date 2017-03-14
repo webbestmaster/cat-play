@@ -1,8 +1,9 @@
 @import './../../../../style/var';
 
 .home-view__language {
-  float: right;
-  @extend .serv__clear-self;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .home-view__flag {

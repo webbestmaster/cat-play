@@ -12,6 +12,12 @@ export default {
 
     language: 'language',
 
+    // other
+    good_luck: 'good luck',
+    win: 'win',
+    draw: 'draw',
+    defeat: 'defeat',
+
     // tic tac toe
     ticTacToe: 'Tic-Tac-Toe',
     welcomeTextList: [
@@ -28,7 +34,8 @@ export default {
         'Я насцу тебе в тапки пока ты будешь спать...',
         'И?...',
         'хм... Хватит кликать'
-    ]
+    ],
+
 
 
 }

@@ -21,7 +21,7 @@ class HomeView extends BaseView {
     render() {
 
         const view = this;
-        const props = view.props;
+        // const props = view.props;
 
         return <div className="base-view">
             <div className="home-view__language">
@@ -30,9 +30,9 @@ class HomeView extends BaseView {
             </div>
 
             <div className="base-view__center-buttons-wrapper">
-                {props.showButtonsReducer.isShowButtons &&
-                <Link className="base-view__center-button" to="/game/tic-tac-toe">{getTranslate('ticTacToe')}</Link>}
+                <Link className="base-view__center-button" to="/game/tic-tac-toe">{getTranslate('ticTacToe')}</Link>
             </div>
+
         </div>;
 
     }
@@ -41,7 +41,7 @@ class HomeView extends BaseView {
 
 export default connect(
     state => ({
-        showButtonsReducer: state.homeReducer.showButtonsReducer,
+        // showButtonsReducer: state.homeReducer.showButtonsReducer,
         currentLanguage: state.currentLanguage
     }),
     {
