@@ -22,7 +22,8 @@ $bgColor: #c7d0e4;
   }
 }
 
-.serv__is-disabled {
-  opacity: 0.5;
+.serv__disabled {
+  opacity: 0.4;
+  pointer-events: none;
 }
 

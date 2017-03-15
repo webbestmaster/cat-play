@@ -7,7 +7,7 @@ class GameHeader extends Component {
     render() {
 
         return <div className="game-header">
-            <div className="game-header__back-button" />
+            <div className="game-header__back-button" onClick={() => history.back() }/>
             <h2 className="game-header__header">{this.props.headerTextReducer.text}</h2>
         </div>;
 

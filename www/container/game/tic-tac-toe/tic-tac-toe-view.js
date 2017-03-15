@@ -187,12 +187,17 @@ class TicTacToeView extends BaseView {
         const difficultHard = CONST.ai.difficult.hard;
         const difficultNormal = CONST.ai.difficult.normal;
         const difficultEase = CONST.ai.difficult.ease;
+        const player0MindType = player0.get(CONST.player.mind.key);
+        const player1MindType = player1.get(CONST.player.mind.key);
+        const humanMindType = CONST.player.mind.Human;
+        const cpuMindType = CONST.player.mind.CPU;
+        const difficultAddedClass = player0MindType === cpuMindType || player1MindType === cpuMindType ? '' : ' serv__disabled';
 
         return <div className="form">
             <h3 className="form__header">Settings</h3>
 
-            <h4 className="form__sub-header">Difficult</h4>
-            <div className="form__section">
+            <h4 className={'form__sub-header' + difficultAddedClass}>Difficult</h4>
+            <div className={'form__section' + difficultAddedClass}>
                 <span
                     className={'form__text-item' + (currentDifficult === difficultEase ? ' form__text-item--selected' : '')}
                     onClick={() => view.setDifficult(difficultEase)}>
@@ -223,12 +228,12 @@ class TicTacToeView extends BaseView {
                     O
                 </span>
                 <span
-                    className={'form__text-item' + (player0.get(CONST.player.mind.key) === CONST.player.mind.Human ? ' form__text-item--selected' : '')}
+                    className={'form__text-item' + (player0MindType === humanMindType ? ' form__text-item--selected' : '')}
                     onClick={() => view.changeSettingsMind(0)}>
                     Human
                 </span>
                 <span
-                    className={'form__text-item' + (player0.get(CONST.player.mind.key) === CONST.player.mind.CPU ? ' form__text-item--selected' : '')}
+                    className={'form__text-item' + (player0MindType === cpuMindType ? ' form__text-item--selected' : '')}
                     onClick={() => view.changeSettingsMind(0)}>
                     CPU
                 </span>
@@ -247,12 +252,12 @@ class TicTacToeView extends BaseView {
                     O
                 </span>
                 <span
-                    className={'form__text-item' + (player1.get(CONST.player.mind.key) === CONST.player.mind.Human ? ' form__text-item--selected' : '')}
+                    className={'form__text-item' + (player1MindType === humanMindType ? ' form__text-item--selected' : '')}
                     onClick={() => view.changeSettingsMind(1)}>
                     Human
                 </span>
                 <span
-                    className={'form__text-item' + (player1.get(CONST.player.mind.key) === CONST.player.mind.CPU ? ' form__text-item--selected' : '')}
+                    className={'form__text-item' + (player1MindType === cpuMindType ? ' form__text-item--selected' : '')}
                     onClick={() => view.changeSettingsMind(1)}>
                     CPU
                 </span>
