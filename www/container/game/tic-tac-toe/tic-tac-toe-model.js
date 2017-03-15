@@ -5,6 +5,7 @@ const _ = require('lodash');
 import TicTacToeAi from './tic-tac-toe-ai'
 import {whoWin, isFieldFull} from './tic-tac-toe-ai';
 import i18n from './../../../services/i18n';
+import { hashHistory } from 'react-router';
 
 const CONST_empty = CONST.empty;
 const CONST_X = CONST.X;
@@ -39,7 +40,8 @@ export default class TicTacToeModel extends BaseModel {
 
         view.props.setIsReadyToPlay(true);
 
-        model.waitForAction(0);
+        model.set(CONST.player.current.id, 1);
+        model.nextTurn();
 
     }
 
@@ -55,7 +57,7 @@ export default class TicTacToeModel extends BaseModel {
             winner.changeBy(CONST.player.score.key, 1);
             if (winner.get(CONST.player.score.key) === model.get(CONST.gameLimit.key)) {
                 view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!');
-                alert('need return to home page!');
+                hashHistory.goBack();
             } else {
                 view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!');
                 model.createNextGame();
@@ -73,6 +75,7 @@ export default class TicTacToeModel extends BaseModel {
             return;
         }
 
+        model.updateWaitingFortNextPlayerMessage();
         model.waitForAction(model.getNextPlayerId());
 
     }
@@ -84,6 +87,8 @@ export default class TicTacToeModel extends BaseModel {
 
         model.createField();
         view.forceUpdate();
+
+        model.updateWaitingFortNextPlayerMessage();
         model.waitForAction(model.getNextPlayerId());
 
     }
@@ -260,6 +265,20 @@ export default class TicTacToeModel extends BaseModel {
         }
 
         model.set(CONST.field.object, result);
+
+    }
+
+    updateWaitingFortNextPlayerMessage() {
+
+        const model = this;
+        const view = model.get('view');
+
+
+        const nextPlayerId = model.getNextPlayerId();
+        const nextPlayer = model.getPlayerById(nextPlayerId);
+
+        view.props.headerSetText('wait for ' + nextPlayer.get(CONST.player.weapon.key));
+
 
     }
 
