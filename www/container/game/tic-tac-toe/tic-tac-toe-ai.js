@@ -205,7 +205,7 @@ export default class TicTacToeAi extends BaseModel {
         const getConfigByDifficultConfig = [
             [1, 1, 1], // ease
             [2, 2, 1], // normal
-            [5, 4, 3]  // hard
+            [4, 4, 3]  // hard
         ];
 
         switch (difficult) {

@@ -9,6 +9,7 @@ import GameHeader from './../../../component/game-header/view';
 import headerSetText from './../../../component/game-header/action/setText';
 import i18n from './../../../services/i18n';
 require.context('./img/', true, /\.svg$/);
+import { withRouter } from 'react-router';
 
 class TicTacToeView extends BaseView {
 
@@ -300,4 +301,4 @@ export default connect(
         setIsReadyToPlay,
         headerSetText
     }
-)(TicTacToeView);
+)(withRouter(TicTacToeView));

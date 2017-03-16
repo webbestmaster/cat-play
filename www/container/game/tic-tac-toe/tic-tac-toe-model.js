@@ -5,7 +5,6 @@ const _ = require('lodash');
 import TicTacToeAi from './tic-tac-toe-ai'
 import {whoWin, isFieldFull} from './tic-tac-toe-ai';
 import i18n from './../../../services/i18n';
-import { hashHistory } from 'react-router';
 
 const CONST_empty = CONST.empty;
 const CONST_X = CONST.X;
@@ -57,7 +56,7 @@ export default class TicTacToeModel extends BaseModel {
             winner.changeBy(CONST.player.score.key, 1);
             if (winner.get(CONST.player.score.key) === model.get(CONST.gameLimit.key)) {
                 view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!');
-                hashHistory.goBack();
+                view.props.router.goBack();
             } else {
                 view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!');
                 model.createNextGame();
