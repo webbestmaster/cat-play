@@ -6,6 +6,7 @@ import changeLanguage from './../../../actions/change-language';
 import {TimelineLite, Power2} from "gsap";
 import i18n from './../../../services/i18n';
 const getTranslate = i18n.get;
+import appConst from '../../../const';
 
 class HomeView extends BaseView {
 
@@ -24,7 +25,7 @@ class HomeView extends BaseView {
         const view = this;
         const refs = view.refs;
 
-        const tweenTime = 0.3;
+        const tweenTime = appConst.tween.time;
 
         const flag1 = refs.flag_1;
         const flag2 = refs.flag_2;

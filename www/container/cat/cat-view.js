@@ -10,7 +10,7 @@ import Text from './component/text';
 import {TimelineLite, Back} from 'gsap';
 
 import {showText} from './action/index';
-import {showButtonsAction} from './../view/home/action/index'
+// import {showButtonsAction} from './../view/home/action/index'
 import util from './../../services/util';
 import CONST from './constant';
 
@@ -161,6 +161,6 @@ export default connect(
     }),
     {
         showTextAction: showText,
-        showButtonsAction: showButtonsAction
+        // showButtonsAction: showButtonsAction
     }
 )(CatView);
