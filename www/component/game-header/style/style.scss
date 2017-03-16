@@ -25,6 +25,9 @@
   color: $mainFontColorDark;
   font-size: 18px;
   padding: 6px 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 

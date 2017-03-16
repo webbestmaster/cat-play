@@ -10,5 +10,5 @@ body {
   line-height: 1.25;
   font-size: 16px; // plus font-size defined from <html>, use rem to be relative from it
   background-color: $bgColor;
-  //background-color: #37c840;
+  user-select: none;
 }
