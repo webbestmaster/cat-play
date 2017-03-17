@@ -1,15 +1,15 @@
 import React, {Component, PropTypes} from 'react';
 import BaseView from '../../../core/Base-view';
-import TicTacToeModel from './tic-tac-toe-model';
+// import TicTacToeModel from './tic-tac-toe-model';
 import CONST from './tic-tac-toe-const';
-import PlayerModel from './player-model';
-import {connect} from 'react-redux';
-import {setIsReadyToPlay} from './action';
-import GameHeader from './../../../component/game-header/view';
-import headerSetText from './../../../component/game-header/action/setText';
-import i18n from './../../../services/i18n';
+// import PlayerModel from './player-model';
+// import {connect} from 'react-redux';
+// import {setIsReadyToPlay} from './action';
+// import GameHeader from './../../../component/game-header/view';
+// import headerSetText from './../../../component/game-header/action/setText';
+// import i18n from './../../../services/i18n';
 // require.context('./img/', true, /\.svg$/);
-import { withRouter } from 'react-router';
+// import { withRouter } from 'react-router';
 import {TimelineLite, Power2} from "gsap";
 
 export default class TicTacToeSettingsView extends BaseView {

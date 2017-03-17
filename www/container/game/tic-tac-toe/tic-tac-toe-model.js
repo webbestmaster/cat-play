@@ -85,7 +85,7 @@ export default class TicTacToeModel extends BaseModel {
         const view = model.get('view');
 
         model.createField();
-        view.forceUpdate();
+        // view.forceUpdate();
 
         model.updateWaitingFortNextPlayerMessage();
         model.waitForAction(model.getNextPlayerId());
@@ -205,10 +205,6 @@ export default class TicTacToeModel extends BaseModel {
     // return true if all is ok
     onClickIn(x, y) {
 
-        // TODO: check for
-        // 1 - field is empty
-        // 2 - current player CAN TO TO TURN
-
         const model = this;
 
         if (model.get(CONST.model.isOnClickEnabled.key) !== CONST.model.isOnClickEnabled.enabled) {
@@ -229,8 +225,6 @@ export default class TicTacToeModel extends BaseModel {
         }
 
         field[x][y] = playerWeapon;
-
-        model.get('view').forceUpdate();
 
         return true;
 

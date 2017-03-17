@@ -1,13 +1,13 @@
 import React, {Component, PropTypes} from 'react';
 import BaseView from '../../../core/Base-view';
-import TicTacToeModel from './tic-tac-toe-model';
+// import TicTacToeModel from './tic-tac-toe-model';
 import CONST from './tic-tac-toe-const';
-import PlayerModel from './player-model';
+// import PlayerModel from './player-model';
 import {connect} from 'react-redux';
-import {setIsReadyToPlay} from './action';
-import GameHeader from './../../../component/game-header/view';
-import headerSetText from './../../../component/game-header/action/setText';
-import i18n from './../../../services/i18n';
+// import {setIsReadyToPlay} from './action';
+// import GameHeader from './../../../component/game-header/view';
+// import headerSetText from './../../../component/game-header/action/setText';
+// import i18n from './../../../services/i18n';
 // require.context('./img/', true, /\.svg$/);
 import {withRouter} from 'react-router';
 import {TimelineLite, Power2} from "gsap";
@@ -45,6 +45,7 @@ class TicTacToeFieldView extends BaseView {
                         }
 
                         model.nextTurn();
+
                         view.forceUpdate();
 
                     }} style={{width: ceilSize + 'px', height: ceilSize + 'px'}}>
@@ -88,7 +89,7 @@ class TicTacToeFieldView extends BaseView {
             }}>
                 {field[0].map((ceil, i) => view.renderRow(i))}
             </div>
-        </div>
+        </div>;
 
     }
 
@@ -101,7 +102,7 @@ TicTacToeFieldView.propTypes = {
 
 export default connect(
     state => ({
-        screen: state.screen,
+        screen: state.screen
         // isReadyToPlayReducer: state.ticTacToeReducer.isReadyToPlay
     }),
     {
