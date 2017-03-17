@@ -3,7 +3,7 @@ export click from './click';
 export currentLanguage from './change-language';
 
 // Cat
-export catReducer from '../container/cat/reducer/index';
+// export catReducer from '../container/cat/reducer/index';
 
 // Home
 // export homeReducer from '../container/view/home/reducer/index'

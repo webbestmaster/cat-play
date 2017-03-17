@@ -225,6 +225,7 @@ export default class TicTacToeModel extends BaseModel {
         }
 
         field[x][y] = playerWeapon;
+        console.error('CPU TURNED, BUT NOT DISPLAYED');
 
         return true;
 

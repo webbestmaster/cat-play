@@ -46,7 +46,9 @@ class TicTacToeFieldView extends BaseView {
 
                         model.nextTurn();
 
-                        view.forceUpdate();
+                        view.forceUpdate(function(){
+                            console.log('force update callback');
+                        });
 
                     }} style={{width: ceilSize + 'px', height: ceilSize + 'px'}}>
                         <img className="tic-tac-toe__ceil-content" src={src} alt={ceil}/>

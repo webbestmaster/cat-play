@@ -1,8 +1,5 @@
-/**
- * Created by dmtu on 3/8/17.
- */
 
-import textConstant from './../container/cat/component/text-constant';
+// import textConstant from './../container/cat/component/text-constant';
 
 export default {
 
@@ -19,7 +16,9 @@ export default {
     defeat: 'defeat',
 
     // tic tac toe
-    ticTacToe: 'Tic-Tac-Toe',
+    ticTacToe: 'Tic-Tac-Toe'
+
+/*
     welcomeTextList: [
         'Hello! My name is XyberCat!\n' + textConstant.mark.tac + '----------\nTap my face to continue.',
         'How are you?',
@@ -35,6 +34,7 @@ export default {
         'И?...',
         'хм... Хватит кликать'
     ],
+*/
 
 
 

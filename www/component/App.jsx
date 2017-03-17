@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import * as actions from '../actions';
 import {connect} from 'react-redux';
-import {CatView} from './../container/index';
+// import {CatView} from './../container/index';
 
 class App extends Component {
 
