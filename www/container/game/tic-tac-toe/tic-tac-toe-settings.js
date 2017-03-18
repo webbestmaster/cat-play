@@ -3,8 +3,8 @@ import BaseView from '../../../core/Base-view';
 // import TicTacToeModel from './tic-tac-toe-model';
 import CONST from './tic-tac-toe-const';
 // import PlayerModel from './player-model';
-// import {connect} from 'react-redux';
-// import {setIsReadyToPlay} from './action';
+import {connect} from 'react-redux';
+import {setIsReadyToPlay} from './action';
 // import GameHeader from './../../../component/game-header/view';
 // import headerSetText from './../../../component/game-header/action/setText';
 // import i18n from './../../../services/i18n';
@@ -13,7 +13,7 @@ import CONST from './tic-tac-toe-const';
 import {TimelineLite, Elastic, Power2} from "gsap";
 import appConst from '../../../const';
 
-export default class TicTacToeSettingsView extends BaseView {
+class TicTacToeSettingsView extends BaseView {
 
     changeSettingsWeapons() {
 
@@ -177,10 +177,18 @@ export default class TicTacToeSettingsView extends BaseView {
                 </span>
             </div>
             <div className="form__section">
-                <div className="form__button form__button--submit" onClick={() => model.startGame()}>start</div>
+                <div className="form__button form__button--submit" onClick={() => view.props.setIsReadyToPlay(true)}>start</div>
             </div>
         </div>
 
     }
 
 }
+
+export default connect(
+    state => ({
+    }),
+    {
+        setIsReadyToPlay
+    }
+)(TicTacToeSettingsView);

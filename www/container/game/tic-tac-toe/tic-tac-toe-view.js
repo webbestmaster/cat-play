@@ -4,15 +4,14 @@ import TicTacToeModel from './tic-tac-toe-model';
 import CONST from './tic-tac-toe-const';
 import PlayerModel from './player-model';
 import {connect} from 'react-redux';
-import {setIsReadyToPlay} from './action';
+import {setIsReadyToPlay, drawTurnOnField} from './action';
 import GameHeader from './../../../component/game-header/view';
 import headerSetText from './../../../component/game-header/action/setText';
 import i18n from './../../../services/i18n';
-require.context('./img/', true, /\.svg$/);
-import {withRouter} from 'react-router';
 import {TimelineLite, Power2} from "gsap";
 import TicTacToeSettingsView from './tic-tac-toe-settings';
 import TicTacToeFieldView from './tic-tac-toe-field';
+require.context('./img/', true, /\.svg$/);
 
 class TicTacToeView extends BaseView {
 
@@ -63,7 +62,7 @@ class TicTacToeView extends BaseView {
 
         const view = this;
 
-        return <div className="base-view">
+        return <div className="base-view" ref="wrapper">
             <GameHeader />
             {
                 view.props.isReadyToPlayReducer.isReady ?
@@ -87,6 +86,7 @@ export default connect(
     }),
     {
         setIsReadyToPlay,
-        headerSetText
+        headerSetText,
+        drawTurnOnField
     }
 )(TicTacToeView);

@@ -6,7 +6,8 @@ const headerText = (function () {
 
     const {SET_TEXT} = HEADER_CONST.TYPE;
     const initialState = {
-        text: ''
+        text: '',
+        callback: function () {}
     };
 
     return function (state = initialState, action) {
@@ -14,7 +15,8 @@ const headerText = (function () {
         if (action.type === SET_TEXT) {
             return {
                 ...state,
-                text: action.text
+                text: action.text,
+                callback: action.callback
             };
         }
 

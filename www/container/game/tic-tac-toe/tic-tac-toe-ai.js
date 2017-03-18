@@ -325,12 +325,12 @@ function getAvailableStatesFromEmpty(field, weapon) {
 
 }
 
-function isFieldEmpty(field) {
-    return field.every(column => column.every(ceil => ceil === CONST_empty))
+export function isFieldEmpty(field) {
+    return field.every(column => column.every(cell => cell === CONST_empty))
 }
 
 export function isFieldFull(field) {
-    return field.every(column => column.every(ceil => ceil !== CONST_empty))
+    return field.every(column => column.every(cell => cell !== CONST_empty))
 }
 
 function isWin(field, weapon) {
@@ -398,7 +398,7 @@ function extractColumns(field) {
 }
 
 function extractRow(field, index) {
-    return field.map(column => column.filter((ceil, i) => i === index)[0]);
+    return field.map(column => column.filter((cell, i) => i === index)[0]);
 }
 
 function extractRows(field) {
@@ -411,7 +411,7 @@ function extractDiagonal(field, number) {
 
         case 0:
 
-            return field.map((column, x) => column.filter((ceil, y) => x === y)[0]);
+            return field.map((column, x) => column.filter((cell, y) => x === y)[0]);
 
             break;
 
@@ -419,7 +419,7 @@ function extractDiagonal(field, number) {
 
             const width = field.length - 1;
 
-            return field.map((column, x) => column.filter((ceil, y) => (width - x) === y)[0]);
+            return field.map((column, x) => column.filter((cell, y) => (width - x) === y)[0]);
 
             break;
 

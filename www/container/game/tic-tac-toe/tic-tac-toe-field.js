@@ -1,21 +1,18 @@
 import React, {Component, PropTypes} from 'react';
 import BaseView from '../../../core/Base-view';
-// import TicTacToeModel from './tic-tac-toe-model';
 import CONST from './tic-tac-toe-const';
-// import PlayerModel from './player-model';
 import {connect} from 'react-redux';
-// import {setIsReadyToPlay} from './action';
-// import GameHeader from './../../../component/game-header/view';
-// import headerSetText from './../../../component/game-header/action/setText';
-// import i18n from './../../../services/i18n';
-// require.context('./img/', true, /\.svg$/);
 import {withRouter} from 'react-router';
 import {TimelineLite, Back} from "gsap";
 import appConst from '../../../const';
 
+const CONST_empty = CONST.empty;
+const CONST_X = CONST.X;
+const CONST_O = CONST.O;
+
 class TicTacToeFieldView extends BaseView {
 
-    getCeilSize() {
+    getCellSize() {
         const {width, height} = this.props.screen;
         return Math.round(Math.min(width, height) / 4);
     }
@@ -25,34 +22,32 @@ class TicTacToeFieldView extends BaseView {
         const view = this;
         const model = view.props.model;
         const field = model.get(CONST.field.object);
-        const ceilSize = view.getCeilSize();
+        const cellSize = view.getCellSize();
         const td = [];
+        const src = require('./img/empty.svg');
 
         field.forEach((column, x) => {
-            column.forEach((ceil, y) => {
+            column.forEach((cell, y) => {
                 if (y !== indexOfRow) {
                     return;
                 }
 
-                const src = require('./img/' + ceil.toLowerCase() + '.svg');
-
                 td.push(
-                    <div className="tic-tac-toe__ceil" key={x + '-' + y} onClick={() => {
+                    <div ref={coordinatesToRef(x, y)} className="tic-tac-toe__cell" key={x + '-' + y}
+                         onClick={() => {
 
-                        const wasClick = model.onClickIn(x, y);
+                             const wasClick = model.onClickIn(x, y);
 
-                        if (!wasClick) {
-                            return;
-                        }
+                             if (!wasClick) {
+                                 return;
+                             }
 
-                        model.nextTurn();
+                             model.nextTurn();
 
-                        view.forceUpdate(function () {
-                            console.log('force update callback');
-                        });
-
-                    }} style={{width: ceilSize + 'px', height: ceilSize + 'px'}}>
-                        <img className="tic-tac-toe__ceil-content" src={src} alt={ceil}/>
+                         }} style={{width: cellSize + 'px', height: cellSize + 'px'}}>
+                        <img className="tic-tac-toe__cell-content" src={src} alt={cell}/>
+                        {(cell === CONST_X || cell === CONST_O) &&
+                        <div dangerouslySetInnerHTML={{__html: require('./img/' + cell.toLowerCase() + '.svg.raw')}}/>}
                     </div>
                 )
             });
@@ -63,9 +58,31 @@ class TicTacToeFieldView extends BaseView {
 
     }
 
+    componentDidUpdate(prevProps, prevState) {
+
+        const view = this;
+
+        if (view.props.newDrawing.weapon) {
+            const {x, y, weapon} = view.props.newDrawing;
+            view.animateWeaponAppearing(x, y, weapon);
+        }
+
+    }
+
+    animateWeaponAppearing(x, y, weapon) {
+
+        const view = this;
+
+        const cell = view.refs[coordinatesToRef(x, y)];
+
+        // cell.innerHTML += require('./img/' + weapon.toLowerCase() + '.svg.raw');
+
+    }
+
     componentDidMount() {
 
         const view = this;
+        const model = view.props.model;
 
         const refs = view.refs;
 
@@ -77,18 +94,24 @@ class TicTacToeFieldView extends BaseView {
 
         const tl = new TimelineLite();
 
+        model.set(CONST.model.isOnClickEnabled.key, CONST.model.isOnClickEnabled.disabled);
+
         tl
             .set(score1, {x: '-30%', alpha: 0})
             .set(score2, {x: '30%', alpha: 0})
             .set(field, {y: '30%', alpha: 0})
-            .to([score1, score2, field], tweenTime * 5, {
+            .to([score1, score2, field], tweenTime * 4, {
                 delay: 0.1,
                 x: '0%',
                 y: '0%',
                 alpha: 1,
                 ease: Back.easeOut.config(1.4)
             })
-            .call(() => tl.kill());
+            .call(() => {
+                tl.kill();
+                model.set(CONST.model.isOnClickEnabled.key, CONST.model.isOnClickEnabled.enabled);
+                model.startGame();
+            });
 
     }
 
@@ -96,7 +119,7 @@ class TicTacToeFieldView extends BaseView {
 
         const view = this;
         const model = view.props.model;
-        const ceilSize = view.getCeilSize();
+        const cellSize = view.getCellSize();
         const field = model.get(CONST.field.object);
         const players = model.get(CONST.players.key);
         const player0 = players[0];
@@ -118,10 +141,10 @@ class TicTacToeFieldView extends BaseView {
             <div
                 ref="field"
                 className="tic-tac-toe__field" style={{
-                width: ceilSize * 3 + 'px',
-                height: ceilSize * 3 + 'px'
+                width: cellSize * 3 + 'px',
+                height: cellSize * 3 + 'px'
             }}>
-                {field[0].map((ceil, i) => view.renderRow(i))}
+                {field[0].map((cell, i) => view.renderRow(i))}
             </div>
         </div>;
 
@@ -129,17 +152,19 @@ class TicTacToeFieldView extends BaseView {
 
 }
 
+function coordinatesToRef(x, y) {
+    return 'cell_' + x + '-' + y;
+}
+
+
 TicTacToeFieldView.propTypes = {
     screen: PropTypes.object.isRequired
 };
 
 export default connect(
     state => ({
-        screen: state.screen
-        // isReadyToPlayReducer: state.ticTacToeReducer.isReadyToPlay
+        screen: state.screen,
+        newDrawing: state.ticTacToeReducer.newDrawing
     }),
-    {
-        // setIsReadyToPlay,
-        // headerSetText
-    }
+    {}
 )(withRouter(TicTacToeFieldView));

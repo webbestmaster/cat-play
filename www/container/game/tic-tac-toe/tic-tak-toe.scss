@@ -6,8 +6,9 @@
   clear: both;
 }
 
-.tic-tac-toe__ceil {
+.tic-tac-toe__cell {
   float: left;
+  position: relative;
 }
 
 .tic-tac-toe__score {
@@ -29,10 +30,15 @@
   text-align: center;
 }
 
-.tic-tac-toe__ceil-content {
+.tic-tac-toe__cell-content {
   display: block;
   width: 80%;
   height: 80%;
   margin-top: 10%;
   margin-left: 10%;
+  &.tic-tac-toe__cell-content--weapon {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
 }

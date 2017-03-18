@@ -35,9 +35,7 @@ export default class TicTacToeModel extends BaseModel {
     startGame() {
 
         const model = this;
-        const view = model.get('view');
-
-        view.props.setIsReadyToPlay(true);
+        // const view = model.get('view');
 
         model.set(CONST.player.current.id, 1);
         model.nextTurn();
@@ -58,19 +56,17 @@ export default class TicTacToeModel extends BaseModel {
                 view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!');
                 view.props.router.goBack();
             } else {
-                view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!');
-                model.createNextGame();
+                view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!', () => model.createNextGame());
             }
 
             return;
         }
 
-        if (isFieldFull(field)){
+        if (isFieldFull(field)) {
             const players = model.get(CONST.players.key);
             players[0].changeBy(CONST.player.score.key, 1);
             players[1].changeBy(CONST.player.score.key, 1);
-            view.props.headerSetText(i18n.get('draw') + '!');
-            model.createNextGame();
+            view.props.headerSetText(i18n.get('draw') + '!', () => model.createNextGame());
             return;
         }
 
@@ -85,7 +81,7 @@ export default class TicTacToeModel extends BaseModel {
         const view = model.get('view');
 
         model.createField();
-        // view.forceUpdate();
+        view.props.drawTurnOnField(); // just update field
 
         model.updateWaitingFortNextPlayerMessage();
         model.waitForAction(model.getNextPlayerId());
@@ -131,8 +127,8 @@ export default class TicTacToeModel extends BaseModel {
                     let nextX = NaN;
                     let nextY = NaN;
 
-                    comparing.forEach((column, x) => column.forEach((ceil, y) => {
-                        if (ceil) {
+                    comparing.forEach((column, x) => column.forEach((cell, y) => {
+                        if (cell) {
                             return;
                         }
                         nextX = x;
@@ -217,15 +213,16 @@ export default class TicTacToeModel extends BaseModel {
 
         const field = model.get(CONST.field.object);
 
-        const ceil = field[x][y];
+        const cell = field[x][y];
 
-        if (ceil !== CONST_empty) {
-            console.log('CEIL IS NOT EMPTY');
+        if (cell !== CONST_empty) {
+            console.log('CELL IS NOT EMPTY');
             return false;
         }
 
         field[x][y] = playerWeapon;
-        console.error('CPU TURNED, BUT NOT DISPLAYED');
+
+        model.get('view').props.drawTurnOnField(x, y, playerWeapon);
 
         return true;
 
@@ -267,12 +264,14 @@ export default class TicTacToeModel extends BaseModel {
         const model = this;
         const view = model.get('view');
 
-
         const nextPlayerId = model.getNextPlayerId();
         const nextPlayer = model.getPlayerById(nextPlayerId);
 
-        view.props.headerSetText('wait for ' + nextPlayer.get(CONST.player.weapon.key));
+        model.set(CONST.model.isOnClickEnabled.key, CONST.model.isOnClickEnabled.disabled);
 
+        view.props.headerSetText('wait for ' + nextPlayer.get(CONST.player.weapon.key),
+            () => model.set(CONST.model.isOnClickEnabled.key, CONST.model.isOnClickEnabled.enabled)
+        );
 
     }
 

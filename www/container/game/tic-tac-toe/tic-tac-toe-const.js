@@ -77,7 +77,8 @@ export default {
         [EMPTY]: './img/empty.svg'
     },
 
-    SET_READY_TO_PLAY: 'SET_READY_TO_PLAY'
+    SET_READY_TO_PLAY: 'SET_READY_TO_PLAY',
+    DRAW_TURN_ON_FIELD: 'DRAW_TURN_ON_FIELD'
 
 };
 
