@@ -10,7 +10,8 @@ import CONST from './tic-tac-toe-const';
 // import i18n from './../../../services/i18n';
 // require.context('./img/', true, /\.svg$/);
 // import { withRouter } from 'react-router';
-import {TimelineLite, Power2} from "gsap";
+import {TimelineLite, Elastic, Power2} from "gsap";
+import appConst from '../../../const';
 
 export default class TicTacToeSettingsView extends BaseView {
 
@@ -58,6 +59,35 @@ export default class TicTacToeSettingsView extends BaseView {
 
     }
 
+    componentDidMount() {
+
+        const view = this;
+        const wrapper = view.refs.wrapper;
+        const nodes = wrapper.querySelectorAll('.form__header, .form__sub-header, .form__section');
+
+        const tweenTime = appConst.tween.time;
+
+        const ease = Elastic.easeOut.config(1, 0.3);
+        const tl = new TimelineLite();
+
+        tl
+            .set(wrapper, {alpha: 0})
+            .set(nodes, {
+                transformPerspective: 200,
+                rotationX: 90,
+                transformOrigin: "center top"
+            })
+            .to(wrapper, tweenTime, {delay: 0.1, alpha: 1, ease: Power2.easeOut})
+            .staggerTo(nodes, tweenTime * 8, {
+                transformPerspective: 200,
+                rotationX: 0,
+                transformOrigin: "center top",
+                ease
+            }, tweenTime / 3)
+            .call(() => tl.kill());
+
+    }
+
     render() {
 
         const view = this;
@@ -77,7 +107,7 @@ export default class TicTacToeSettingsView extends BaseView {
         const cpuMindType = CONST.player.mind.CPU;
         const difficultAddedClass = player0MindType === cpuMindType || player1MindType === cpuMindType ? '' : ' serv__disabled';
 
-        return <div className="form">
+        return <div ref="wrapper" className="form">
             <h3 className="form__header">Settings</h3>
 
             <h4 className={'form__sub-header' + difficultAddedClass}>Difficult</h4>
