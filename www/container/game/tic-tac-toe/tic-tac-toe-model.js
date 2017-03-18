@@ -74,6 +74,7 @@ export default class TicTacToeModel extends BaseModel {
             const players = model.get(CONST.players.key);
             players[0].changeBy(CONST.player.score.key, 1);
             players[1].changeBy(CONST.player.score.key, 1);
+            view.props.drawNewCount();
             view.props.headerSetText(i18n.get('draw') + '!', () => {
                 setTimeout(() => model.createNextGame(), 1000);
             });
@@ -150,8 +151,6 @@ export default class TicTacToeModel extends BaseModel {
                     );
 
                     model.onClickIn(nextX, nextY);
-
-                    model.nextTurn();
 
                 });
 

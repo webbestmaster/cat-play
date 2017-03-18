@@ -37,13 +37,14 @@ class TicTacToeFieldView extends BaseView {
                     <div ref={coordinatesToRef(x, y)} className="tic-tac-toe__cell" key={x + '-' + y}
                          onClick={() => {
 
-                             const wasClick = model.onClickIn(x, y);
+                             model.onClickIn(x, y);
+                             {/*const wasClick = model.onClickIn(x, y);*/}
 
-                             if (!wasClick) {
-                                 return;
-                             }
+                             {/*if (!wasClick) {*/}
+                                 {/*return;*/}
+                             {/*}*/}
 
-                             model.nextTurn();
+                             {/*model.nextTurn();*/}
 
                          }} style={{width: cellSize + 'px', height: cellSize + 'px'}}>
                         <img className="tic-tac-toe__cell-content" src={src} alt={cell}/>
@@ -64,14 +65,20 @@ class TicTacToeFieldView extends BaseView {
 
         const view = this;
 
-        if (view.props.newDrawing.weapon) {
-            const {x, y, weapon} = view.props.newDrawing;
-            view.animateWeaponAppearing(x, y, weapon);
+        if (!_.isEqual(view.props.newDrawing, prevProps.newDrawing)) {
+            const {x, y} = view.props.newDrawing;
+            view.animateWeaponAppearing(x, y);
         }
 
         if (!_.isEqual(view.props.newCount, prevProps.newCount)) {
             const tl = new TimelineLite();
-            const node = view.refs['score' + view.props.newCount.playerId + 'value'];
+            let node = view.refs['score' + view.props.newCount.playerId + 'value'];
+            if (!node) {
+                node = [
+                    view.refs.score0value,
+                    view.refs.score1value
+                ]
+            }
             const tweenTime = appConst.tween.time;
             tl
                 .from(node, tweenTime * 2, {scale: 5, alpha: 0, ease: Back.easeOut.config(1.4)})
@@ -80,13 +87,32 @@ class TicTacToeFieldView extends BaseView {
 
     }
 
-    animateWeaponAppearing(x, y, weapon) {
+    animateWeaponAppearing(x, y) {
 
         const view = this;
+        const model = view.props.model;
 
         const cell = view.refs[coordinatesToRef(x, y)];
 
-        // cell.innerHTML += require('./img/' + weapon.toLowerCase() + '.svg.raw');
+        if (!cell) {
+            return;
+        }
+
+        const tl = new TimelineLite();
+
+        const pathList = cell.querySelectorAll('path');
+        const tweenTime = appConst.tween.time;
+
+        model.set(CONST.model.isOnClickEnabled.key, CONST.model.isOnClickEnabled.disabled);
+
+        tl
+            .set(pathList, {drawSVG: '0%'})
+            .staggerTo(pathList, tweenTime / 2, {delay: 0.1, drawSVG: true}, tweenTime / 2)
+            .call(() => {
+                tl.kill();
+                model.set(CONST.model.isOnClickEnabled.key, CONST.model.isOnClickEnabled.enabled);
+                model.nextTurn();
+            });
 
     }
 
@@ -149,13 +175,15 @@ class TicTacToeFieldView extends BaseView {
             <div
                 ref="score0"
                 className="tic-tac-toe__score">
-                <p className="tic-tac-toe__score-label">{i18n.get('player')} 1: {player0.get(CONST.player.weapon.key)}</p>
+                <p className="tic-tac-toe__score-label">{i18n.get('player')}
+                    1: {player0.get(CONST.player.weapon.key)}</p>
                 <p ref="score0value" className="tic-tac-toe__score-number">{player0.get(CONST.player.score.key)}</p>
             </div>
             <div
                 ref="score1"
                 className="tic-tac-toe__score">
-                <p className="tic-tac-toe__score-label">{i18n.get('player')} 2: {player1.get(CONST.player.weapon.key)}</p>
+                <p className="tic-tac-toe__score-label">{i18n.get('player')}
+                    2: {player1.get(CONST.player.weapon.key)}</p>
                 <p ref="score1value" className="tic-tac-toe__score-number">{player1.get(CONST.player.score.key)}</p>
             </div>
             <div

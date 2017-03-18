@@ -7,3 +7,4 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
 require('es6-promise-polyfill');
 require('./lib/SplitText');
+require('./lib/DrawSVGPlugin');

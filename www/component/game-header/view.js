@@ -37,9 +37,9 @@ class GameHeader extends Component {
 
             header.textContent = prevText;
 
-            tl.to(header, tweenTime, {y: '-100%'})
+            tl.to(header, tweenTime / 2, {y: '-100%'})
                 .call(() => header.textContent = currentText)
-                .to(header, tweenTime, {y: '0%'})
+                .to(header, tweenTime / 2, {y: '0%'})
                 .call(() => {
                     tl.kill();
                     view.props.headerTextReducer.callback();
