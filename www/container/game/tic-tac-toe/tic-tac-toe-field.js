@@ -175,15 +175,13 @@ class TicTacToeFieldView extends BaseView {
             <div
                 ref="score0"
                 className="tic-tac-toe__score">
-                <p className="tic-tac-toe__score-label">{i18n.get('player')}
-                    1: {player0.get(CONST.player.weapon.key)}</p>
+                <p className="tic-tac-toe__score-label">{i18n.get('player')} 1: {player0.get(CONST.player.weapon.key)}</p>
                 <p ref="score0value" className="tic-tac-toe__score-number">{player0.get(CONST.player.score.key)}</p>
             </div>
             <div
                 ref="score1"
                 className="tic-tac-toe__score">
-                <p className="tic-tac-toe__score-label">{i18n.get('player')}
-                    2: {player1.get(CONST.player.weapon.key)}</p>
+                <p className="tic-tac-toe__score-label">{i18n.get('player')} 2: {player1.get(CONST.player.weapon.key)}</p>
                 <p ref="score1value" className="tic-tac-toe__score-number">{player1.get(CONST.player.score.key)}</p>
             </div>
             <div
