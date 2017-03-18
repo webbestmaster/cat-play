@@ -11,6 +11,7 @@ import {connect} from 'react-redux';
 // require.context('./img/', true, /\.svg$/);
 import {withRouter} from 'react-router';
 import {TimelineLite, Power2} from "gsap";
+import appConst from '../../../const';
 
 class TicTacToeFieldView extends BaseView {
 
@@ -46,7 +47,7 @@ class TicTacToeFieldView extends BaseView {
 
                         model.nextTurn();
 
-                        view.forceUpdate(function(){
+                        view.forceUpdate(function () {
                             console.log('force update callback');
                         });
 
@@ -62,6 +63,35 @@ class TicTacToeFieldView extends BaseView {
 
     }
 
+    componentDidMount() {
+
+        const view = this;
+
+        const refs = view.refs;
+
+        const score1 = refs.score1;
+        const score2 = refs.score2;
+        const field = refs.field;
+
+        const tweenTime = appConst.tween.time;
+
+        const tl = new TimelineLite();
+
+        tl
+            .set(score1, {x: '-30%', alpha: 0})
+            .set(score2, {x: '30%', alpha: 0})
+            .set(field, {y: '30%', alpha: 0})
+            .staggerTo([score1, score2, field], tweenTime * 5, {
+                delay: 0.1,
+                x: '0%',
+                y: '0%',
+                alpha: 1,
+                ease: Elastic.easeOut.config(1, 0.3)
+            }, tweenTime)
+            .call(() => tl.kill());
+
+    }
+
     render() {
 
         const view = this;
@@ -74,18 +104,20 @@ class TicTacToeFieldView extends BaseView {
 
         return <div>
             <div
-                key="player-score-0"
+                ref="score1"
                 className="tic-tac-toe__score">
                 <p className="tic-tac-toe__score-label">Player 1: {player0.get(CONST.player.weapon.key)}</p>
                 <p className="tic-tac-toe__score-number">{player0.get(CONST.player.score.key)}</p>
             </div>
             <div
-                key="player-score-1"
+                ref="score2"
                 className="tic-tac-toe__score">
                 <p className="tic-tac-toe__score-label">Player 2: {player1.get(CONST.player.weapon.key)}</p>
                 <p className="tic-tac-toe__score-number">{player1.get(CONST.player.score.key)}</p>
             </div>
-            <div key="tic-tac-toe-field" className="tic-tac-toe__field" style={{
+            <div
+                ref="field"
+                className="tic-tac-toe__field" style={{
                 width: ceilSize * 3 + 'px',
                 height: ceilSize * 3 + 'px'
             }}>
@@ -100,7 +132,6 @@ class TicTacToeFieldView extends BaseView {
 TicTacToeFieldView.propTypes = {
     screen: PropTypes.object.isRequired
 };
-
 
 export default connect(
     state => ({
