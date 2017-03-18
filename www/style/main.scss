@@ -11,4 +11,5 @@ body {
   font-size: 16px; // plus font-size defined from <html>, use rem to be relative from it
   background-color: $bgColor;
   user-select: none;
+  overflow: hidden;
 }
