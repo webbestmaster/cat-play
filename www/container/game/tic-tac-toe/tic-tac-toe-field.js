@@ -10,7 +10,7 @@ import {connect} from 'react-redux';
 // import i18n from './../../../services/i18n';
 // require.context('./img/', true, /\.svg$/);
 import {withRouter} from 'react-router';
-import {TimelineLite, Power2} from "gsap";
+import {TimelineLite, Back} from "gsap";
 import appConst from '../../../const';
 
 class TicTacToeFieldView extends BaseView {
@@ -81,13 +81,13 @@ class TicTacToeFieldView extends BaseView {
             .set(score1, {x: '-30%', alpha: 0})
             .set(score2, {x: '30%', alpha: 0})
             .set(field, {y: '30%', alpha: 0})
-            .staggerTo([score1, score2, field], tweenTime * 5, {
+            .to([score1, score2, field], tweenTime * 5, {
                 delay: 0.1,
                 x: '0%',
                 y: '0%',
                 alpha: 1,
-                ease: Elastic.easeOut.config(1, 0.3)
-            }, tweenTime)
+                ease: Back.easeOut.config(1.4)
+            })
             .call(() => tl.kill());
 
     }
