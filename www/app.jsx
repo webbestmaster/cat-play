@@ -6,6 +6,7 @@ import thunk from 'redux-thunk';
 import {browserHistory, hashHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 import util from './services/util';
+import FastClick from 'fastclick';
 
 import * as reducers from './reducer';
 import AppRouter from './AppRouter';
@@ -29,3 +30,5 @@ ReactDOM.render(
     </Provider>,
     document.querySelector('.js-app-wrapper')
 );
+
+FastClick.attach(document.body);
