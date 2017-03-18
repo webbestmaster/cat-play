@@ -5,8 +5,9 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
 import {TimelineLite, Back} from "gsap";
 import appConst from '../../../const';
-
-const CONST_empty = CONST.empty;
+import _ from 'lodash';
+import {drawTurnOnField} from './action';
+import i18n from './../../../services/i18n';
 const CONST_X = CONST.X;
 const CONST_O = CONST.O;
 
@@ -47,7 +48,8 @@ class TicTacToeFieldView extends BaseView {
                          }} style={{width: cellSize + 'px', height: cellSize + 'px'}}>
                         <img className="tic-tac-toe__cell-content" src={src} alt={cell}/>
                         {(cell === CONST_X || cell === CONST_O) &&
-                        <div dangerouslySetInnerHTML={{__html: require('./img/' + cell.toLowerCase() + '.svg.raw')}}/>}
+                        <div className="js-remove-me-from-field"
+                             dangerouslySetInnerHTML={{__html: require('./img/' + cell.toLowerCase() + '.svg.raw')}}/>}
                     </div>
                 )
             });
@@ -67,6 +69,15 @@ class TicTacToeFieldView extends BaseView {
             view.animateWeaponAppearing(x, y, weapon);
         }
 
+        if (!_.isEqual(view.props.newCount, prevProps.newCount)) {
+            const tl = new TimelineLite();
+            const node = view.refs['score' + view.props.newCount.playerId + 'value'];
+            const tweenTime = appConst.tween.time;
+            tl
+                .from(node, tweenTime * 2, {scale: 5, alpha: 0, ease: Back.easeOut.config(1.4)})
+                .call(() => tl.kill());
+        }
+
     }
 
     animateWeaponAppearing(x, y, weapon) {
@@ -79,6 +90,15 @@ class TicTacToeFieldView extends BaseView {
 
     }
 
+    componentWillMount() {
+
+        const model = this.props.model;
+
+        model.createField();
+        this.props.drawTurnOnField(); // just update field
+
+    }
+
     componentDidMount() {
 
         const view = this;
@@ -86,8 +106,8 @@ class TicTacToeFieldView extends BaseView {
 
         const refs = view.refs;
 
+        const score0 = refs.score0;
         const score1 = refs.score1;
-        const score2 = refs.score2;
         const field = refs.field;
 
         const tweenTime = appConst.tween.time;
@@ -97,10 +117,10 @@ class TicTacToeFieldView extends BaseView {
         model.set(CONST.model.isOnClickEnabled.key, CONST.model.isOnClickEnabled.disabled);
 
         tl
-            .set(score1, {x: '-30%', alpha: 0})
-            .set(score2, {x: '30%', alpha: 0})
+            .set(score0, {x: '-30%', alpha: 0})
+            .set(score1, {x: '30%', alpha: 0})
             .set(field, {y: '30%', alpha: 0})
-            .to([score1, score2, field], tweenTime * 4, {
+            .to([score0, score1, field], tweenTime * 4, {
                 delay: 0.1,
                 x: '0%',
                 y: '0%',
@@ -127,16 +147,16 @@ class TicTacToeFieldView extends BaseView {
 
         return <div>
             <div
-                ref="score1"
+                ref="score0"
                 className="tic-tac-toe__score">
-                <p className="tic-tac-toe__score-label">Player 1: {player0.get(CONST.player.weapon.key)}</p>
-                <p className="tic-tac-toe__score-number">{player0.get(CONST.player.score.key)}</p>
+                <p className="tic-tac-toe__score-label">{i18n.get('player')} 1: {player0.get(CONST.player.weapon.key)}</p>
+                <p ref="score0value" className="tic-tac-toe__score-number">{player0.get(CONST.player.score.key)}</p>
             </div>
             <div
-                ref="score2"
+                ref="score1"
                 className="tic-tac-toe__score">
-                <p className="tic-tac-toe__score-label">Player 2: {player1.get(CONST.player.weapon.key)}</p>
-                <p className="tic-tac-toe__score-number">{player1.get(CONST.player.score.key)}</p>
+                <p className="tic-tac-toe__score-label">{i18n.get('player')} 2: {player1.get(CONST.player.weapon.key)}</p>
+                <p ref="score1value" className="tic-tac-toe__score-number">{player1.get(CONST.player.score.key)}</p>
             </div>
             <div
                 ref="field"
@@ -158,13 +178,14 @@ function coordinatesToRef(x, y) {
 
 
 TicTacToeFieldView.propTypes = {
-    screen: PropTypes.object.isRequired
+    // screen: PropTypes.object.isRequired
 };
 
 export default connect(
     state => ({
         screen: state.screen,
-        newDrawing: state.ticTacToeReducer.newDrawing
+        newDrawing: state.ticTacToeReducer.newDrawing,
+        newCount: state.ticTacToeReducer.newCount
     }),
-    {}
+    {drawTurnOnField}
 )(withRouter(TicTacToeFieldView));

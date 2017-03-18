@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import {setIsReadyToPlay} from './action';
 // import GameHeader from './../../../component/game-header/view';
 // import headerSetText from './../../../component/game-header/action/setText';
-// import i18n from './../../../services/i18n';
+import i18n from './../../../services/i18n';
 // require.context('./img/', true, /\.svg$/);
 // import { withRouter } from 'react-router';
 import {TimelineLite, Elastic, Power2} from "gsap";
@@ -108,28 +108,28 @@ class TicTacToeSettingsView extends BaseView {
         const difficultAddedClass = player0MindType === cpuMindType || player1MindType === cpuMindType ? '' : ' serv__disabled';
 
         return <div ref="wrapper" className="form">
-            <h3 className="form__header">Settings</h3>
+            <h3 className="form__header">{i18n.get('settings')}</h3>
 
-            <h4 className={'form__sub-header' + difficultAddedClass}>Difficult</h4>
+            <h4 className={'form__sub-header' + difficultAddedClass}>{i18n.get('difficult')}</h4>
             <div className={'form__section' + difficultAddedClass}>
                 <span
                     className={'form__text-item' + (currentDifficult === difficultEase ? ' form__text-item--selected' : '')}
                     onClick={() => view.setDifficult(difficultEase)}>
-                    Ease
+                    {i18n.get('ease')}
                 </span>
                 <span
                     className={'form__text-item' + (currentDifficult === difficultNormal ? ' form__text-item--selected' : '')}
                     onClick={() => view.setDifficult(difficultNormal)}>
-                    Normal
+                    {i18n.get('normal')}
                 </span>
                 <span
                     className={'form__text-item' + (currentDifficult === difficultHard ? ' form__text-item--selected' : '')}
                     onClick={() => view.setDifficult(difficultHard)}>
-                    Hard
+                    {i18n.get('hard')}
                 </span>
             </div>
 
-            <h4 className="form__sub-header">Player 1</h4>
+            <h4 className="form__sub-header">{i18n.get('player')} 1</h4>
             <div className="form__section">
                 <span
                     className={'form__text-item' + (player0.get(CONST.player.weapon.key) === CONST.X ? ' form__text-item--selected' : '')}
@@ -144,16 +144,16 @@ class TicTacToeSettingsView extends BaseView {
                 <span
                     className={'form__text-item' + (player0MindType === humanMindType ? ' form__text-item--selected' : '')}
                     onClick={() => view.changeSettingsMind(0)}>
-                    Human
+                    {i18n.get('human')}
                 </span>
                 <span
                     className={'form__text-item' + (player0MindType === cpuMindType ? ' form__text-item--selected' : '')}
                     onClick={() => view.changeSettingsMind(0)}>
-                    CPU
+                    {i18n.get('ai')}
                 </span>
             </div>
 
-            <h4 className="form__sub-header">Player 2</h4>
+            <h4 className="form__sub-header">{i18n.get('player')} 2</h4>
             <div className="form__section">
                 <span
                     className={'form__text-item' + (player1.get(CONST.player.weapon.key) === CONST.X ? ' form__text-item--selected' : '')}
@@ -168,16 +168,18 @@ class TicTacToeSettingsView extends BaseView {
                 <span
                     className={'form__text-item' + (player1MindType === humanMindType ? ' form__text-item--selected' : '')}
                     onClick={() => view.changeSettingsMind(1)}>
-                    Human
+                    {i18n.get('human')}
                 </span>
                 <span
                     className={'form__text-item' + (player1MindType === cpuMindType ? ' form__text-item--selected' : '')}
                     onClick={() => view.changeSettingsMind(1)}>
-                    CPU
+                    {i18n.get('ai')}
                 </span>
             </div>
             <div className="form__section">
-                <div className="form__button form__button--submit" onClick={() => view.props.setIsReadyToPlay(true)}>start</div>
+                <div className="form__button form__button--submit" onClick={() => view.props.setIsReadyToPlay(true)}>
+                    {i18n.get('start')}
+                </div>
             </div>
         </div>
 

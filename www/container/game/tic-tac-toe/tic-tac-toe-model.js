@@ -35,10 +35,9 @@ export default class TicTacToeModel extends BaseModel {
     startGame() {
 
         const model = this;
-        // const view = model.get('view');
-
         model.set(CONST.player.current.id, 1);
-        model.nextTurn();
+        // model.createField();
+        model.createNextGame();
 
     }
 
@@ -52,12 +51,21 @@ export default class TicTacToeModel extends BaseModel {
         if (winnerWeapon) {
             const winner = model.getPlayerByWeapon(winnerWeapon);
             winner.changeBy(CONST.player.score.key, 1);
-            if (winner.get(CONST.player.score.key) === model.get(CONST.gameLimit.key)) {
-                view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!');
-                view.props.router.goBack();
-            } else {
-                view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!', () => model.createNextGame());
-            }
+            /*
+             if (winner.get(CONST.player.score.key) === model.get(CONST.gameLimit.key)) {
+             view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!', () => {
+
+             });
+             } else {
+             view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!', () => model.createNextGame());
+             view.props.drawNewCount(winner.get(CONST.player.score.key), winner.get('id'));
+             }
+             */
+
+            view.props.headerSetText(winnerWeapon + ' ' + i18n.get('win') + '!', () => {
+                setTimeout(() => model.createNextGame(), 1000);
+            });
+            view.props.drawNewCount(winner.get(CONST.player.score.key), winner.get('id'));
 
             return;
         }
@@ -66,12 +74,13 @@ export default class TicTacToeModel extends BaseModel {
             const players = model.get(CONST.players.key);
             players[0].changeBy(CONST.player.score.key, 1);
             players[1].changeBy(CONST.player.score.key, 1);
-            view.props.headerSetText(i18n.get('draw') + '!', () => model.createNextGame());
+            view.props.headerSetText(i18n.get('draw') + '!', () => {
+                setTimeout(() => model.createNextGame(), 1000);
+            });
             return;
         }
 
         model.updateWaitingFortNextPlayerMessage();
-        model.waitForAction(model.getNextPlayerId());
 
     }
 
@@ -81,10 +90,9 @@ export default class TicTacToeModel extends BaseModel {
         const view = model.get('view');
 
         model.createField();
-        view.props.drawTurnOnField(); // just update field
+        view.props.drawTurnOnField(NaN, NaN, true); // just update field
 
         model.updateWaitingFortNextPlayerMessage();
-        model.waitForAction(model.getNextPlayerId());
 
     }
 
@@ -269,8 +277,11 @@ export default class TicTacToeModel extends BaseModel {
 
         model.set(CONST.model.isOnClickEnabled.key, CONST.model.isOnClickEnabled.disabled);
 
-        view.props.headerSetText('wait for ' + nextPlayer.get(CONST.player.weapon.key),
-            () => model.set(CONST.model.isOnClickEnabled.key, CONST.model.isOnClickEnabled.enabled)
+        view.props.headerSetText(i18n.get('wait_for') + ' ' + nextPlayer.get(CONST.player.weapon.key),
+            () => {
+                model.set(CONST.model.isOnClickEnabled.key, CONST.model.isOnClickEnabled.enabled);
+                model.waitForAction(nextPlayerId);
+            }
         );
 
     }

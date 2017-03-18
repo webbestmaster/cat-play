@@ -16,7 +16,20 @@ export default {
     defeat: 'defeat',
 
     // tic tac toe
-    ticTacToe: 'Tic-Tac-Toe'
+    ticTacToe: 'Tic-Tac-Toe',
+
+    // settings
+    settings: 'settings',
+    difficult: 'difficult',
+    ease: 'ease',
+    normal: 'normal',
+    hard: 'hard',
+    player: 'player',
+    human: 'human',
+    ai: 'AI',
+    start: 'start',
+    wait_for: 'wait for'
+
 
 /*
     welcomeTextList: [

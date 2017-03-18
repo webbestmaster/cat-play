@@ -4,7 +4,7 @@ import TicTacToeModel from './tic-tac-toe-model';
 import CONST from './tic-tac-toe-const';
 import PlayerModel from './player-model';
 import {connect} from 'react-redux';
-import {setIsReadyToPlay, drawTurnOnField} from './action';
+import {setIsReadyToPlay, drawTurnOnField, drawNewCount} from './action';
 import GameHeader from './../../../component/game-header/view';
 import headerSetText from './../../../component/game-header/action/setText';
 import i18n from './../../../services/i18n';
@@ -58,6 +58,10 @@ class TicTacToeView extends BaseView {
 
     }
 
+    componentWillUnmount() {
+        this.props.setIsReadyToPlay(false);
+    }
+
     render() {
 
         const view = this;
@@ -87,6 +91,7 @@ export default connect(
     {
         setIsReadyToPlay,
         headerSetText,
-        drawTurnOnField
+        drawTurnOnField,
+        drawNewCount
     }
 )(TicTacToeView);
