@@ -9,7 +9,7 @@ export default {
 
     language: 'язык',
 
-    // other
+    // gaming
     good_luck: 'удачи',
     win: 'победа',
     draw: 'ничья',
@@ -28,7 +28,10 @@ export default {
     human: 'человек',
     ai: 'ИИ',
     start: 'старт',
-    wait_for: 'ждём ход'
+    wait_for: 'ждём ход',
+
+    // other
+    press_again_to_exit: 'Нажмите еще раз для выхода'
 
     /*
         welcomeTextList: [

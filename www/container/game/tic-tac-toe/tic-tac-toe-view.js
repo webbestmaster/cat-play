@@ -11,6 +11,8 @@ import i18n from './../../../services/i18n';
 import {TimelineLite, Power2} from "gsap";
 import TicTacToeSettingsView from './tic-tac-toe-settings';
 import TicTacToeFieldView from './tic-tac-toe-field';
+import {withRouter} from 'react-router';
+import timer from './../../../services/timer';
 require.context('./img/', true, /\.svg$/);
 
 class TicTacToeView extends BaseView {
@@ -49,12 +51,39 @@ class TicTacToeView extends BaseView {
 
     }
 
+    routerWillLeave(e) {
+
+        const view = this;
+        const markId = 'tic-tac-toe-route-living';
+        const maxTimeForDblClick = 2e3;
+        const now = Date.now();
+        const lastTime = timer.getTimeByMark(markId) || 0;
+        const deltaTime = now - lastTime;
+
+        if (deltaTime < maxTimeForDblClick) {
+            return true;
+        }
+
+        timer.createMark(markId);
+        view.props.router.goForward();
+        view.props.headerSetText(i18n.get('press_again_to_exit'));
+
+        return false;
+
+    }
+
     componentWillMount() {
 
         const view = this;
+        const props = view.props;
 
-        view.props.headerSetText(i18n.get('good_luck') + '!');
-        view.props.setIsReadyToPlay(false);
+        props.router.setRouteLeaveHook(
+            props.route,
+            e => view.routerWillLeave(e)
+        );
+
+        props.headerSetText(i18n.get('good_luck') + '!');
+        props.setIsReadyToPlay(false);
 
     }
 
@@ -94,4 +123,4 @@ export default connect(
         drawTurnOnField,
         drawNewCount
     }
-)(TicTacToeView);
+)(withRouter(TicTacToeView));

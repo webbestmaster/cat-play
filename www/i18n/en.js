@@ -9,7 +9,7 @@ export default {
 
     language: 'language',
 
-    // other
+    // gaming
     good_luck: 'good luck',
     win: 'win',
     draw: 'draw',
@@ -28,7 +28,10 @@ export default {
     human: 'human',
     ai: 'AI',
     start: 'start',
-    wait_for: 'wait for'
+    wait_for: 'wait for',
+
+    // other
+    press_again_to_exit: 'Press again to exit'
 
 
 /*
