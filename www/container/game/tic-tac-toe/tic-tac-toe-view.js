@@ -33,13 +33,13 @@ class TicTacToeView extends BaseView {
                 new PlayerModel({
                     id: 0,
                     [CONST.player.score.key]: 0,
-                    [CONST.player.mind.key]: CONST.player.mind.CPU,
+                    [CONST.player.mind.key]: CONST.player.mind.Human,
                     [CONST.player.weapon.key]: CONST.player.weapon.X
                 }),
                 new PlayerModel({
                     id: 1,
                     [CONST.player.score.key]: 0,
-                    [CONST.player.mind.key]: CONST.player.mind.Human,
+                    [CONST.player.mind.key]: CONST.player.mind.CPU,
                     [CONST.player.weapon.key]: CONST.player.weapon.O
                 })
             ],

@@ -110,7 +110,7 @@ class TicTacToeSettingsView extends BaseView {
         return <div ref="wrapper" className="form">
             <h3 className="form__header">{i18n.get('settings')}</h3>
 
-            <h4 className={'form__sub-header' + difficultAddedClass}>{i18n.get('difficult')}</h4>
+            <h4 className={'form__sub-header' + difficultAddedClass}>{i18n.get('difficult')} {i18n.get('ai')}</h4>
             <div className={'form__section' + difficultAddedClass}>
                 <span
                     className={'form__text-item' + (currentDifficult === difficultEase ? ' form__text-item--selected' : '')}
